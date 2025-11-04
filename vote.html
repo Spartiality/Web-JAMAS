@@ -209,6 +209,32 @@
       </section>
       <!-- end login section -->
 
+  <!-- begin voting main-section -->
+  <div class="evote-hero">
+    <div class="evote-card" role="main" aria-labelledby="evote-title">
+      <header class="mb-3 d-flex align-items-center justify-content-center">
+        <img src="images/JAMAS.png" alt="JAMAS MATSANEWA logo" style="width: 55px; height: 55px; margin-right: 12px;">
+        <h1 id="evote-title" style="font-size: 1.5rem; margin: 0; color: #fff;">JAMAS MATSANEWA</h1>
+      </header>
+
+      <!-- begin login section -->
+      <!-- Page 1: LOGIN -->
+      <section id="page-login" class="evote-page">
+        <h2>Voter Login</h2>
+        <p class="lead">Enter your name to start voting</p>
+
+        <label for="nama" class="sr-only">Enter name</label>
+        <input type="text" id="nama" class="evote-input" placeholder="Enter your name..." aria-describedby="error-msg" aria-required="true">
+
+        <div class="mt-4">
+          <button type="button" class="oval-button" id="login-btn">Login</button>
+        </div>
+
+        <p class="error" id="error-msg" role="alert" aria-live="assertive"></p>
+        <p id="loading-msg" style="margin-top:10px; color: rgba(255,255,255,.85); font-size: .95rem;">Loading voter list...</p>
+      </section>
+      <!-- end login section -->
+
       <!-- begin voting section -->
       <!-- Page 2: VOTING -->
       <section id="page-vote" class="evote-page" style="display: none; margin-top: 8px;">
@@ -218,25 +244,25 @@
           <div class="candidate-card">
             <img src="kandidat1.jpg" alt="Candidate 1 photo">
             <h3 class="mt-4">Candidate 1</h3>
-            <button type="button" class="oval-button candidate-btn mt-3" data-name="Kandidat 1">Select</button>
+            <button type="button" class="oval-button candidate-btn mt-3" data-name="Candidate 1">Select</button>
           </div>
 
           <div class="candidate-card">
             <img src="kandidat2.jpg" alt="Candidate 2 photo">
             <h3 class="mt-4">Candidate 2</h3>
-            <button type="button" class="oval-button candidate-btn mt-3" data-name="Kandidat 2">Select</button>
+            <button type="button" class="oval-button candidate-btn mt-3" data-name="Candidate 2">Select</button>
           </div>
 
           <div class="candidate-card">
             <img src="kandidat3.jpg" alt="Candidate 3 photo">
             <h3 class="mt-4">Candidate 3</h3>
-            <button type="button" class="oval-button candidate-btn mt-3" data-name="Kandidat 3">Select</button>
+            <button type="button" class="oval-button candidate-btn mt-3" data-name="Candidate 3">Select</button>
           </div>
 
           <div class="candidate-card">
             <img src="kandidat4.jpg" alt="Candidate 4 photo">
             <h3 class="mt-4">Candidate 4</h3>
-            <button type="button" class="oval-button candidate-btn mt-3" data-name="Kandidat 4">Select</button>
+            <button type="button" class="oval-button candidate-btn mt-3" data-name="Candidate 4">Select</button>
           </div>
         </div>
       </section>
@@ -266,8 +292,19 @@
   <!-- begin vote-script section -->
   <script>
     (function () {
-      // Keep original behavior but improved structure and repo-consistent styling
-      const daftarNama = ["Agus", "Asep", "Abu", "Neneng", "Andi"];
+      // Backend endpoint placeholder (Google Apps Script Web App URL)
+      // Replace this with your deployed Web App URL, e.g.:
+      // const API_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
+      const API_URL = "https://script.google.com/macros/s/AKfycbxvDJ4Vfg9oqtNS3zmADcPB2g8b5PN71K4iq2ijQ7xDjOIyQDj4zRgAGCGjoIWoZ6R4QQ/exec";
+
+      // State
+      let daftarNama = []; // raw names from the sheet
+      let nameMap = new Map(); // normalizedName -> canonical sheet name
+      let allowedNamesNormalized = new Set(); // for O(1) checks
+      let alreadyVotedNormalized = new Set(); // names who already voted
+      let configLoaded = false;
+
+      // Elements
       const pageLogin = document.getElementById("page-login");
       const pageVote = document.getElementById("page-vote");
       const pageThanks = document.getElementById("page-thanks");
@@ -275,11 +312,12 @@
       const loginBtn = document.getElementById("login-btn");
       const kembaliBtn = document.getElementById("kembali-btn");
       const candidateBtns = document.querySelectorAll(".candidate-btn");
-      const scriptURL = "https://script.google.com/macros/s/AKfycbxrfTqecUnWPCdR-vERqlfajM-x5bHyVDMfCv5w4hUmBJJAn3HEns36YV_7XSPYDewy/exec";
-      let sudahMengirim = false;
+      const loadingMsg = document.getElementById("loading-msg");
+
+      let submitting = false;
 
       function normalizeName(n) {
-        return n.trim().replace(/\s+/g, ' ').toLowerCase();
+        return n.trim().replace(/\s+/g, " ").toLowerCase();
       }
 
       function showError(msg) {
@@ -287,111 +325,175 @@
       }
 
       function clearError() {
-        errorMsg.textContent = '';
+        errorMsg.textContent = "";
+      }
+
+      function setCandidateButtonsDisabled(disabled) {
+        candidateBtns.forEach(b => b.disabled = disabled);
+      }
+
+      async function loadConfig() {
+        try {
+          const url = API_URL + "?action=config";
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 10000);
+          const res = await fetch(url, { method: "GET", signal: controller.signal });
+          clearTimeout(timeout);
+
+          if (!res.ok) throw new Error("Network error while loading config");
+          const data = await res.json();
+
+          // Expected shape:
+          // {
+          //   voters: ["Agus", "Asep", ...],
+          //   alreadyVoted: ["Agus", ...]  // any canonical names who already voted
+          // }
+          daftarNama = Array.isArray(data.voters) ? data.voters : [];
+          const al = Array.isArray(data.alreadyVoted) ? data.alreadyVoted : [];
+
+          // Build lookup structures
+          nameMap.clear();
+          allowedNamesNormalized.clear();
+          alreadyVotedNormalized.clear();
+
+          daftarNama.forEach(n => {
+            const norm = normalizeName(n);
+            allowedNamesNormalized.add(norm);
+            if (!nameMap.has(norm)) nameMap.set(norm, n); // first canonical wins
+          });
+
+          al.forEach(n => {
+            const norm = normalizeName(n);
+            alreadyVotedNormalized.add(norm);
+          });
+
+          configLoaded = true;
+          if (loadingMsg) loadingMsg.textContent = "Voter list loaded.";
+        } catch (e) {
+          if (loadingMsg) loadingMsg.textContent = "Failed to load voter list. Please refresh the page.";
+        }
       }
 
       // clear error while typing
-      document.getElementById('nama').addEventListener('input', clearError);
+      document.getElementById("nama").addEventListener("input", clearError);
 
-      window.addEventListener('load', function () {
-        // keep previous localStorage guard (not secure; server-side required)
+      window.addEventListener("load", function () {
+        // Load server config on page load
+        loadConfig();
+
+        // Keep the old local UX guard (not secure—server enforces the real protection)
         if (localStorage.getItem("sudahPilih") === "true") {
-          // show thanks page
           pageLogin.style.display = "none";
           pageVote.style.display = "none";
           pageThanks.style.display = "block";
         }
       });
 
-      loginBtn.addEventListener('click', function () {
+      loginBtn.addEventListener("click", function () {
+        clearError();
         const namaRaw = document.getElementById("nama").value;
-        const nama = normalizeName(namaRaw);
-        if (nama === "") {
+        const namaNorm = normalizeName(namaRaw);
+
+        if (!configLoaded) {
+          showError("Please wait, still loading voter list...");
+          return;
+        }
+        if (namaNorm === "") {
           showError("Name cannot be empty");
           return;
         }
-
-        const daftarNormalized = daftarNama.map(n => normalizeName(n));
-        if (!daftarNormalized.includes(nama)) {
+        if (!allowedNamesNormalized.has(namaNorm)) {
           showError("Your name is not registered as a voter");
           return;
         }
+        if (alreadyVotedNormalized.has(namaNorm)) {
+          showError("This name has already voted");
+          return;
+        }
 
-        localStorage.setItem("pemilih", nama); // note: for real security, server-side verification required
+        // Store canonical sheet name for consistent server records
+        const canonical = nameMap.get(namaNorm) || namaRaw.trim();
+        localStorage.setItem("pemilih", canonical);
+
         pageLogin.style.display = "none";
         pageVote.style.display = "block";
-        // move focus to first candidate button for accessibility
-        const firstBtn = document.querySelector('.candidate-btn');
+
+        const firstBtn = document.querySelector(".candidate-btn");
         if (firstBtn) firstBtn.focus();
       });
 
-      function setCandidateButtonsDisabled(disabled) {
-        candidateBtns.forEach(b => b.disabled = disabled);
-      }
-
-      function pilih(namaKandidat) {
-        const namaPemilih = localStorage.getItem("pemilih");
-        if (!namaPemilih) {
+      async function submitVote(candidateName) {
+        const pemilih = localStorage.getItem("pemilih");
+        if (!pemilih) {
           showError("Please login first");
           return;
         }
+        if (submitting) return;
 
-        if (localStorage.getItem("sudahPilih") || sudahMengirim) {
-          showError("You have already voted");
-          return;
-        }
-
-        sudahMengirim = true;
+        submitting = true;
         setCandidateButtonsDisabled(true);
+        clearError();
 
-        const formData = new FormData();
-        formData.append("nama", namaPemilih);
-        formData.append("kandidat", namaKandidat);
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 10000);
 
-        // AbortController with timeout
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 10000);
+          // Use standard form data for easiest handling in Apps Script
+          const formData = new FormData();
+          formData.append("action", "vote");
+          formData.append("name", pemilih);
+          formData.append("candidate", candidateName);
 
-        fetch(scriptURL, { method: "POST", body: formData, signal: controller.signal })
-          .then(res => {
-            clearTimeout(timeout);
-            if (!res.ok) throw new Error('network');
-            return res.text();
-          })
-          .then(text => {
-            sudahMengirim = false;
-            setCandidateButtonsDisabled(false);
-            if (text.includes("Success")) {
-              localStorage.setItem("sudahPilih", "true");
-              pageVote.style.display = "none";
-              pageThanks.style.display = "block";
-              pageThanks.focus && pageThanks.focus();
-            } else if (text.includes("SudahVote")) {
+          const res = await fetch(API_URL, { method: "POST", body: formData, signal: controller.signal });
+          clearTimeout(timeout);
+
+          if (!res.ok) throw new Error("network");
+          const json = await res.json();
+
+          // Expected JSON:
+          // { status: "ok" }
+          // { status: "error", code: "already_voted" | "not_registered" | "invalid_candidate" | "bad_request" | "server_error", message: "..." }
+          if (json.status === "ok") {
+            localStorage.setItem("sudahPilih", "true");
+            pageVote.style.display = "none";
+            pageThanks.style.display = "block";
+            pageThanks.focus && pageThanks.focus();
+          } else if (json.status === "error") {
+            if (json.code === "already_voted") {
               showError("This name has already voted");
+            } else if (json.code === "not_registered") {
+              showError("Your name is not registered as a voter");
+            } else if (json.code === "invalid_candidate") {
+              showError("Invalid candidate");
             } else {
-              showError("Failed to send vote, please try again");
+              showError(json.message || "Failed to send vote, please try again");
             }
-          })
-          .catch(err => {
-            sudahMengirim = false;
-            setCandidateButtonsDisabled(false);
-            if (err.name === 'AbortError') {
-              showError("Request timed out, please try again");
-            } else {
-              showError("Failed to send vote, please try again");
-            }
-          });
+          } else {
+            showError("Failed to send vote, please try again");
+          }
+        } catch (err) {
+          if (err.name === "AbortError") {
+            showError("Request timed out, please try again");
+          } else {
+            showError("Failed to send vote, please try again");
+          }
+        } finally {
+          submitting = false;
+          setCandidateButtonsDisabled(false);
+        }
       }
 
-      candidateBtns.forEach(btn => {
-        btn.addEventListener('click', function (e) {
-          const name = e.currentTarget.getAttribute('data-name');
-          pilih(name);
+      // Candidate button click handlers
+      document.querySelectorAll(".candidate-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const name = e.currentTarget.getAttribute("data-name");
+          submitVote(name);
         });
       });
 
-      kembaliBtn.addEventListener('click', function () {
+      kembaliBtn.addEventListener("click", function () {
         localStorage.removeItem("pemilih");
+        localStorage.removeItem("sudahPilih");
         pageThanks.style.display = "none";
         pageLogin.style.display = "block";
         document.getElementById("nama").value = "";
