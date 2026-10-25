@@ -297,7 +297,8 @@ a:focus {
 
 .slider_section .img-box {
   width: 100%;
-  max-width: 560px;
+  max-width: 500px;
+  height: 350px;
   margin: 0 auto;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -309,13 +310,17 @@ a:focus {
       -ms-flex-align: center;
           align-items: center;
   overflow: hidden;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f4f4f4, #ececec);
+  padding: 14px;
 }
 
 .slider_section .img-box img {
   width: 100%;
-  max-height: 480px;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   display: block;
+  border-radius: 14px;
 }
 
 .slider_section .carousel-indicators {
@@ -458,11 +463,13 @@ a:focus {
 
 .blog_section .box .img-box {
   position: relative;
+  height: 240px;
+  overflow: hidden;
 }
 
 .blog_section .box .img-box img {
   width: 100%;
-  height: 250px;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -900,10 +907,27 @@ a:focus {
   display: block;
 }
 
-/* --- proportional poster / media sizing fix --- */
+/* premium proportional layout */
 .slider_section .img-box {
-  max-width: 520px;
-  height: 420px;
+  max-width: 470px;
+  height: 330px;
+}
+
+.member-photo,
+.gallery-card,
+.blog_section .box .img-box {
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.member-photo {
+  height: 200px;
+  margin-bottom: 18px;
+}
+
+.gallery-card {
+  height: 220px;
+  margin-bottom: 24px;
 }
 
 .slider_section .img-box img,
@@ -913,51 +937,35 @@ a:focus {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.hero-image-box {
-  max-width: 480px;
-}
-
-.member-photo,
-.gallery-card {
-  overflow: hidden;
-  border-radius: 16px;
-  background: #f5f5f5;
-}
-
-.member-photo {
-  height: 220px;
-  margin-bottom: 18px;
-}
-
-.gallery-card {
-  height: 220px;
-  margin-bottom: 25px;
-}
-
-.program-card,
 .member-card,
 .gallery-card,
-.blog_section .box {
+.blog_section .box,
+.program-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.program-card:hover,
 .member-card:hover,
 .gallery-card:hover,
-.blog_section .box:hover {
-  transform: translateY(-3px);
+.blog_section .box:hover,
+.program-card:hover {
+  transform: translateY(-2px);
 }
 
 @media (max-width: 767px) {
   .slider_section .img-box {
     max-width: 100%;
-    height: 280px;
+    height: 260px;
   }
 
   .member-photo,
   .gallery-card {
-    height: 200px;
+    height: 180px;
+  }
+
+  .blog_section .box .img-box {
+    height: 210px;
   }
 }
