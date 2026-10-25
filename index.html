@@ -1,464 +1,631 @@
-<!DOCTYPE html>
-<html>
-
+<!doctype html>
+<html lang="id" class="no-js">
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <link rel="icon" href="images/JAMAS.png" type="image/gif" />
-  <meta name="keywords" content="JAMAS Matsanewa, update kegiatan, organisasi masjid, kegiatan keagamaan" />
-  <meta name="description" content="JAMAS Matsanewa menghadirkan update terbaru, agenda kegiatan, program keagamaan, dan dokumentasi organisasi di MTsN 1 Kota Malang." />
-  <meta name="author" content="JAMAS Matsanewa" />
-
-  <title>JAMAS Matsanewa | Update & Kegiatan</title>
-
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-  <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap" rel="stylesheet" />
-  <link href="css/font-awesome.min.css" rel="stylesheet" />
-  <link href="css/style.css" rel="stylesheet" />
-  <link href="css/responsive.css" rel="stylesheet" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JAMAS Matsanewa — Iman, Ilmu, Ukhuwah</title>
+  <meta name="description" content="JAMAS Matsanewa adalah wadah kegiatan keagamaan, sosial, dan pembinaan siswa di MTsN 1 Kota Malang. Menjaga iman, menumbuhkan ilmu, merawat ukhuwah.">
+  <meta name="theme-color" content="#0A3327">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jamasmatsanewa.me/">
+  <meta property="og:title" content="JAMAS Matsanewa — Iman, Ilmu, Ukhuwah">
+  <meta property="og:description" content="Wadah kegiatan keagamaan, sosial, dan pembinaan siswa di MTsN 1 Kota Malang.">
+  <meta property="og:image" content="https://jamasmatsanewa.me/images/opt/isra.jpg">
+  <meta property="og:image:alt" content="Penceramah pada peringatan Isra Mi'raj JAMAS">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://jamasmatsanewa.me/images/opt/isra.jpg">
+  <link rel="canonical" href="https://jamasmatsanewa.me/">
+  <link rel="icon" href="images/opt/favicon.png" type="image/png">
+  <link rel="preload" href="fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/jamas.css">
+  <noscript>
+    <style>
+      .nav { position: absolute; background: #f4eddd; color: #0b1f17; border-bottom: 1px solid rgba(11,31,23,.12); }
+      .nav::before { display: none; }
+      .nav__links { display: flex !important; flex-wrap: wrap; gap: .7rem 1rem; margin-left: auto; }
+      .nav__links a { font-size: .58rem; }
+      .nav__cta, .nav__toggle { display: none !important; }
+    </style>
+  </noscript>
+  <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
 </head>
-
 <body>
-  <div class="hero_area">
-    <header class="header_section long_section px-0">
-      <nav class="navbar navbar-expand-lg custom_nav-container">
-        <a class="navbar-brand" href="index.html">
-          <span>JAMAS Matsanewa</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class=""> </span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
-            <ul class="navbar-nav">
-              <li class="nav-item active">
-                <a class="nav-link" href="index.html">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#about">Tentang</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#anggota">Anggota</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="programDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Program Kami
-                </a>
-                <div class="dropdown-menu" aria-labelledby="programDropdown">
-                  <a class="dropdown-item" href="program-kami.html#form">Form Pengaduan</a>
-                  <a class="dropdown-item" href="program-kami.html#bakti-sosial">Bakti Sosial</a>
-                  <a class="dropdown-item" href="program-kami.html#bakti-pendidikan">Bakti Pendidikan</a>
-                  <a class="dropdown-item" href="program-kami.html#bakti-agama">Bakti Agama</a>
-                </div>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#galeri">Galeri</a>
-              </li>
-            </ul>
-          </div>
-        </div>
+  <a class="skip-link" href="#main">Langsung ke konten</a>
+  <div class="progress" aria-hidden="true"><span class="progress__bar"></span></div>
+
+  <svg class="svg-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-star8" viewBox="0 0 100 100">
+      <path d="M50 0 59.6 26.9 85.4 14.6 73.1 40.4 100 50 73.1 59.6 85.4 85.4 59.6 73.1 50 100 40.4 73.1 14.6 85.4 26.9 59.6 0 50 26.9 40.4 14.6 14.6 40.4 26.9Z" fill="none" stroke="currentColor" stroke-width="1.4"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24">
+      <path d="M5 19 19 5M8 5h11v11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24">
+      <path d="M19 12H5m6-6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24">
+      <path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-map" viewBox="0 0 24 24">
+      <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="12" cy="10" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    </symbol>
+    <symbol id="i-drive" viewBox="0 0 24 24">
+      <path d="M3 7.5A1.5 1.5 0 0 1 4.5 6H9l2 2.5h8.5A1.5 1.5 0 0 1 21 10v8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18V7.5Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    </symbol>
+    <symbol id="i-close" viewBox="0 0 24 24">
+      <path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24">
+      <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-quote" viewBox="0 0 48 48">
+      <path d="M20 12c-7 2-12 8-12 16v8h12V24h-6c0-5 2-8 6-10v-2Zm20 0c-7 2-12 8-12 16v8h12V24h-6c0-5 2-8 6-10v-2Z" fill="currentColor"/>
+    </symbol>
+  </svg>
+
+  <header class="nav" id="nav">
+    <div class="nav__bar">
+      <a class="brand" href="#home" aria-label="JAMAS Matsanewa, kembali ke atas">
+        <span class="brand__logo"><img src="images/opt/logo.png" width="600" height="600" alt="" aria-hidden="true"></span>
+        <span class="brand__text"><strong>JAMAS</strong><small>Matsanewa</small></span>
+      </a>
+
+      <nav class="nav__links" aria-label="Navigasi utama">
+        <a href="#home"><span>01</span>Home</a>
+        <a href="#tentang"><span>02</span>Tentang</a>
+        <a href="#anggota"><span>03</span>Anggota</a>
+        <a href="#program"><span>04</span>Program Kami</a>
+        <a href="#galeri"><span>05</span>Galeri</a>
       </nav>
-    </header>
 
-    <section class="slider_section long_section">
-      <div id="customCarousel" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <div class="container">
-              <div class="row align-items-center">
-                <div class="col-md-5">
-                  <div class="detail-box">
-                    <span class="section-tag">Update terbaru</span>
-                    <h1>JAMAS <br> MATSANEWA</h1>
-                    <p>
-                      Menyajikan kegiatan, agenda, dokumentasi, dan program keagamaan yang menjadi bagian dari semangat kebersamaan dan pengabdian di MTsN 1 Kota Malang.
-                    </p>
-                    <div class="btn-box">
-                      <a href="#updates" class="btn2">Lihat Update</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-7">
-                  <div class="img-box hero-image-box">
-                    <img src="images/slider logo jamas.png" alt="Logo JAMAS Matsanewa" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <a class="nav__cta" href="https://www.instagram.com/jamas_matsanewa" target="_blank" rel="noopener">
+        <svg width="14" height="14" aria-hidden="true"><use href="#i-instagram"></use></svg>
+        <span>Instagram</span>
+      </a>
 
-          <div class="carousel-item">
-            <div class="container">
-              <div class="row align-items-center">
-                <div class="col-md-5">
-                  <div class="detail-box">
-                    <span class="section-tag">Kajian Islam</span>
-                    <h1>KAIS<br>(Kajian Islami)</h1>
-                    <p>
-                      Kajian rutin yang menghadirkan pembahasan keislaman, akhlak, dan kehidupan sosial agar semangat ibadah dan nilai keimanan terus tumbuh dalam keseharian.
-                    </p>
-                    <div class="btn-box">
-                      <a href="#programs" class="btn1">Lihat Program</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-7">
-                  <div class="img-box">
-                    <img src="images/slider kais-new.jpeg" alt="Kegiatan KAIS" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-open>
+        <span class="nav__toggle-lines" aria-hidden="true"><i></i><i></i></span>
+        <span class="nav__toggle-label">Menu</span>
+      </button>
+    </div>
+  </header>
 
-          <div class="carousel-item">
-            <div class="container">
-              <div class="row align-items-center">
-                <div class="col-md-5">
-                  <div class="detail-box">
-                    <span class="section-tag">Agenda</span>
-                    <h1>Safari <br> Ramadan</h1>
-                    <p>
-                      Menjadi momen kebersamaan dalam menebar manfaat, mempererat ukhuwah, dan meramaikan bulan suci dengan kegiatan yang penuh keberkahan.
-                    </p>
-                    <div class="btn-box">
-                      <a href="#agenda" class="btn2">Lihat Agenda</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-7">
-                  <div class="img-box">
-                    <img src="images/Blog Kanan.png" alt="Safari Ramadan JAMAS" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <ol class="carousel-indicators">
-          <li data-target="#customCarousel" data-slide-to="0" class="active"></li>
-          <li data-target="#customCarousel" data-slide-to="1"></li>
-          <li data-target="#customCarousel" data-slide-to="2"></li>
-        </ol>
-      </div>
-    </section>
+  <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu navigasi" hidden>
+    <div class="menu__top">
+      <span class="brand brand--menu">
+        <span class="brand__logo"><img src="images/opt/logo.png" width="600" height="600" alt="" aria-hidden="true"></span>
+        <span class="brand__text"><strong>JAMAS</strong><small>Matsanewa</small></span>
+      </span>
+      <button class="menu__close" type="button" data-menu-close aria-label="Tutup menu">
+        <svg width="22" height="22" aria-hidden="true"><use href="#i-close"></use></svg>
+      </button>
+    </div>
+    <nav class="menu__links" aria-label="Menu seluler">
+      <a href="#home"><span>01</span>Home<svg width="20" height="20" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+      <a href="#tentang"><span>02</span>Tentang<svg width="20" height="20" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+      <a href="#anggota"><span>03</span>Anggota<svg width="20" height="20" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+      <a href="#program"><span>04</span>Program Kami<svg width="20" height="20" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+      <a href="#galeri"><span>05</span>Galeri<svg width="20" height="20" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+    </nav>
+    <div class="menu__foot">
+      <a href="https://www.instagram.com/jamas_matsanewa" target="_blank" rel="noopener"><svg width="16" height="16" aria-hidden="true"><use href="#i-instagram"></use></svg>@jamas_matsanewa</a>
+      <a href="https://maps.app.goo.gl/8diYYJscoifqPd9g9" target="_blank" rel="noopener"><svg width="16" height="16" aria-hidden="true"><use href="#i-map"></use></svg>Masjid Al-Fajr, MTsN 1 Kota Malang</a>
+    </div>
   </div>
 
-  <section class="stats_section layout_padding2">
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-md-4">
-          <div class="stat-box">
-            <h3>8+</h3>
-            <p>Program Aktif</p>
+  <main id="main">
+
+    <!-- 00 · HERO -->
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero__bg" aria-hidden="true">
+        <span class="hero__ring hero__ring--one"></span>
+        <span class="hero__ring hero__ring--two"></span>
+        <span class="hero__dots"></span>
+        <svg class="hero__star"><use href="#i-star8"></use></svg>
+        <span class="hero__vertical">IMAN · ILMU · UKHUWAH</span>
+      </div>
+
+      <div class="hero__inner">
+        <div class="hero__eyebrow" data-hero-fade>
+          <span>MTsN 1 Kota Malang · Organisasi Siswa</span>
+          <span class="hero__eyebrow-right">Iman · Ilmu · Ukhuwah</span>
+        </div>
+
+        <h1 class="hero__title" id="hero-title" aria-label="JAMAS">
+          <span class="hero__letter"><span>J</span></span>
+          <span class="hero__letter"><span>A</span></span>
+          <span class="hero__letter"><span>M</span></span>
+          <span class="hero__letter"><span>A</span></span>
+          <span class="hero__letter"><span>S</span></span>
+        </h1>
+
+        <div class="hero__media" aria-label="Dokumentasi kegiatan JAMAS">
+          <figure class="hero__photo hero__photo--main" data-hero-photo>
+            <img src="images/opt/isra.jpg" width="1500" height="1000" alt="Penceramah menyampaikan materi pada peringatan Isra Mi'raj di Masjid Al-Fajr" fetchpriority="high">
+            <figcaption>Isra Mi'raj · Masjid Al-Fajr</figcaption>
+          </figure>
+
+          <div class="hero__seal" aria-hidden="true">
+            <svg viewBox="0 0 100 100" class="hero__seal-text">
+              <defs><path id="sealPath" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"></path></defs>
+              <text><textPath href="#sealPath">JAMAS MATSANEWA · IMAN · ILMU · UKHUWAH ·</textPath></text>
+            </svg>
+            <img src="images/opt/logo.png" width="600" height="600" alt="">
+          </div>
+
+          <figure class="hero__photo hero__photo--small" data-hero-photo>
+            <img src="images/opt/naila.jpg" width="600" height="900" alt="Potret Naila Afiqa P., kandidat ketua JAMAS 2026">
+          </figure>
+        </div>
+
+        <div class="hero__bottom">
+          <div class="hero__copy" data-hero-copy>
+            <p class="eyebrow eyebrow--gold">JAMAS Matsanewa</p>
+            <p class="hero__lede">Wadah kegiatan keagamaan, sosial, dan pembinaan siswa. Menjaga iman, menumbuhkan ilmu, merawat ukhuwah.</p>
+            <div class="hero__actions">
+              <a class="btn btn--gold" href="#tentang"><span>Jelajahi JAMAS</span><svg width="16" height="16" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+              <a class="link-arrow" href="#program">Lihat program<svg width="16" height="16" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+            </div>
+          </div>
+
+          <div class="hero__side" data-hero-copy>
+            <ul class="hero__stats">
+              <li><strong data-count="8" data-suffix="+">8+</strong><span>Kegiatan aktif</span></li>
+              <li><strong data-count="1000" data-suffix="+">1K+</strong><span>Partisipasi</span></li>
+              <li><strong>24/7</strong><span>Terhubung</span></li>
+            </ul>
+            <a class="hero__scroll" href="#tentang"><span class="hero__scroll-line" aria-hidden="true"></span>Gulir untuk mengenal</a>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="stat-box">
-            <h3>1K+</h3>
-            <p>Partisipasi</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="stat-box">
-            <h3>24/7</h3>
-            <p>Komunitas Terhubung</p>
-          </div>
-        </div>
+      </div>
+    </section>
+
+    <div class="ticker ticker--gold" aria-hidden="true">
+      <div class="ticker__track">
+        <span>Iman</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Ilmu</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Ukhuwah</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Pengabdian</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Iman</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Ilmu</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Ukhuwah</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Pengabdian</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
       </div>
     </div>
-  </section>
 
-  <section id="about" class="about_section layout_padding long_section">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="img-box">
-            <img src="images/slider logo jamas.png" alt="Tentang JAMAS" />
-          </div>
+    <!-- 01 · TENTANG -->
+    <section class="about section" id="tentang" aria-labelledby="about-title">
+      <div class="wrap">
+        <div class="sec-head">
+          <span class="sec-num">01</span>
+          <span class="sec-label">Tentang JAMAS</span>
+          <span class="sec-note">Dari masjid, untuk kehidupan</span>
         </div>
-        <div class="col-md-6">
-          <div class="detail-box">
-            <div class="heading_container">
-              <h2>Tentang JAMAS</h2>
+
+        <div class="about__main">
+          <div class="about__lead">
+            <h2 class="sec-title" id="about-title" data-lines>
+              <span class="line"><span>Bukan sekadar</span></span>
+              <span class="line"><span><em>organisasi.</em></span></span>
+            </h2>
+            <div class="about__copy" data-reveal>
+              <p class="about__intro">JAMAS Matsanewa adalah wadah kegiatan keagamaan, sosial, dan pembinaan di lingkungan MTsN 1 Kota Malang.</p>
+              <p>Kami hadir untuk menjaga semangat ibadah, memperkuat ukhuwah, serta menjalankan berbagai program yang memberi manfaat bagi masyarakat dan lingkungan sekitar. Dari kajian Islam, kegiatan sosial, hingga dokumentasi dan pengelolaan informasi, JAMAS terus tumbuh sebagai komunitas yang aktif, inspiratif, dan bermanfaat.</p>
+              <div class="about__signature">
+                <span class="about__signature-line" aria-hidden="true"></span>
+                <span>JAMAS Matsanewa<br><small>MTsN 1 Kota Malang</small></span>
+              </div>
             </div>
-            <p>
-              JAMAS Matsanewa adalah wadah kegiatan keagamaan, sosial, dan pembinaan di lingkungan MTsN 1 Kota Malang. Kami hadir untuk menjaga semangat ibadah, memperkuat ukhuwah, serta menjalankan berbagai program yang memberi manfaat bagi masyarakat dan lingkungan sekitar.
-            </p>
-            <p>
-              Dari kajian Islam, kegiatan sosial, hingga dokumentasi dan pengelolaan informasi, JAMAS terus berkembang sebagai komunitas yang aktif, inspiratif, dan bermanfaat.
-            </p>
-            <a href="about.html">Baca Selengkapnya</a>
+          </div>
+
+          <div class="about__collage" aria-label="Dokumentasi kegiatan JAMAS">
+            <figure class="about__photo about__photo--main" data-reveal="photo">
+              <img src="images/opt/safari.jpg" width="1024" height="964" alt="Kolase dokumentasi Safari Ramadan JAMAS di Masjid Al-Ikhlas" loading="lazy">
+              <figcaption><span>01</span> Safari Ramadan 2025</figcaption>
+            </figure>
+            <figure class="about__photo about__photo--small" data-reveal="photo">
+              <img src="images/opt/isra.jpg" width="1500" height="1000" alt="Penceramah pada acara Isra Mi'raj JAMAS" loading="lazy">
+            </figure>
+            <div class="about__seal" data-reveal aria-hidden="true">
+              <img src="images/opt/logo.png" width="600" height="600" alt="">
+            </div>
+            <svg class="about__star" data-parallax="0.12" aria-hidden="true"><use href="#i-star8"></use></svg>
+            <p class="about__caption" data-reveal>Kegiatan, kebersamaan, dan pelayanan — direkam dalam satu gerak.</p>
           </div>
         </div>
+
+        <div class="about__pillars">
+          <article class="pillar">
+            <span class="pillar__index">01</span>
+            <h3>Iman</h3>
+            <p>Menjaga semangat ibadah dan menumbuhkan kesadaran spiritual dalam keseharian.</p>
+            <svg class="pillar__icon" aria-hidden="true"><use href="#i-star8"></use></svg>
+          </article>
+          <article class="pillar">
+            <span class="pillar__index">02</span>
+            <h3>Ilmu</h3>
+            <p>Membuka ruang belajar, berdiskusi, dan mengembangkan wawasan keislaman.</p>
+            <svg class="pillar__icon" aria-hidden="true"><use href="#i-star8"></use></svg>
+          </article>
+          <article class="pillar">
+            <span class="pillar__index">03</span>
+            <h3>Ukhuwah</h3>
+            <p>Merawat kebersamaan, solidaritas, dan kepedulian antarwarga sekolah.</p>
+            <svg class="pillar__icon" aria-hidden="true"><use href="#i-star8"></use></svg>
+          </article>
+        </div>
+
+        <div class="about__stats" data-reveal>
+          <div><strong data-count="8" data-suffix="+">8+</strong><span>Kegiatan aktif</span></div>
+          <div><strong data-count="1000" data-suffix="+">1K+</strong><span>Partisipasi</span></div>
+          <div><strong>24/7</strong><span>Komunitas terhubung</span></div>
+          <p class="about__quote"><svg width="28" height="28" aria-hidden="true"><use href="#i-quote"></use></svg>“Menjaga yang sudah tumbuh, membuka ruang untuk yang belum datang.”</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 · ANGGOTA -->
+    <section class="members section" id="anggota" aria-labelledby="members-title">
+      <div class="wrap members__head">
+        <div class="sec-head sec-head--light">
+          <span class="sec-num">02</span>
+          <span class="sec-label">Anggota</span>
+          <span class="sec-note">Orang-orang di balik gerak</span>
+        </div>
+        <div class="members__intro-grid">
+          <h2 class="sec-title sec-title--light" id="members-title" data-lines>
+            <span class="line"><span>Wajah di balik</span></span>
+            <span class="line"><span><em>JAMAS.</em></span></span>
+          </h2>
+          <p class="members__lede" data-reveal>Energi JAMAS datang dari siswa yang percaya bahwa kegiatan keagamaan bisa tumbuh bersama karya, pelayanan, dan kebersamaan.</p>
+        </div>
+      </div>
+
+      <div class="members__viewport" data-horizontal="members">
+        <div class="members__track" data-track>
+          <article class="members__text-card">
+            <span class="eyebrow eyebrow--gold">04 wajah · 01 gerakan</span>
+            <p>Setiap anggota membawa peran, gagasan, dan energi yang berbeda. Bersama, mereka menjaga JAMAS tetap hidup.</p>
+            <span class="members__hint">Geser untuk bertemu mereka <svg width="16" height="16" aria-hidden="true"><use href="#i-arrow-right"></use></svg></span>
+          </article>
+
+          <article class="member">
+            <div class="member__photo">
+              <img src="images/opt/naila.jpg" width="600" height="900" alt="Potret Naila Afiqa P." loading="lazy">
+              <span class="member__tag">Kandidat Ketua 2026</span>
+            </div>
+            <div class="member__meta">
+              <span class="member__index">01</span>
+              <div><h3>Naila Afiqa P.</h3><p>Anggota JAMAS</p></div>
+              <svg class="member__arrow" width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+            </div>
+          </article>
+
+          <article class="member">
+            <div class="member__photo">
+              <img src="images/opt/naira.jpg" width="601" height="900" alt="Potret Naira Ezza F." loading="lazy">
+              <span class="member__tag">Kandidat Ketua 2026</span>
+            </div>
+            <div class="member__meta">
+              <span class="member__index">02</span>
+              <div><h3>Naira Ezza F.</h3><p>Anggota JAMAS</p></div>
+              <svg class="member__arrow" width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+            </div>
+          </article>
+
+          <article class="member">
+            <div class="member__photo">
+              <img src="images/opt/kartika.jpg" width="675" height="900" alt="Potret Kartika Putri T." loading="lazy">
+              <span class="member__tag">Kandidat Ketua 2026</span>
+            </div>
+            <div class="member__meta">
+              <span class="member__index">03</span>
+              <div><h3>Kartika Putri T.</h3><p>Anggota JAMAS</p></div>
+              <svg class="member__arrow" width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+            </div>
+          </article>
+
+          <article class="member">
+            <div class="member__photo">
+              <img src="images/opt/jauza.jpg" width="675" height="900" alt="Potret Jauza Absal D." loading="lazy">
+              <span class="member__tag">Kandidat Ketua 2026</span>
+            </div>
+            <div class="member__meta">
+              <span class="member__index">04</span>
+              <div><h3>Jauza Absal D.</h3><p>Anggota JAMAS</p></div>
+              <svg class="member__arrow" width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+            </div>
+          </article>
+
+          <article class="members__cta-card">
+            <svg class="members__cta-star" aria-hidden="true"><use href="#i-star8"></use></svg>
+            <h3>Ingin menjadi bagian dari gerakan ini?</h3>
+            <p>Ikuti perjalanan JAMAS dan sapa kami di Instagram.</p>
+            <a class="btn btn--gold" href="https://www.instagram.com/jamas_matsanewa" target="_blank" rel="noopener"><span>@jamas_matsanewa</span><svg width="16" height="16" aria-hidden="true"><use href="#i-instagram"></use></svg></a>
+          </article>
+        </div>
+        <div class="h-scroll" aria-hidden="true"><span></span></div>
+      </div>
+
+      <div class="wrap members__roles">
+        <div class="roles__head" data-reveal>
+          <span class="eyebrow eyebrow--gold">Struktur & peran</span>
+          <h3>Setiap peran punya arti.</h3>
+        </div>
+        <div class="roles__grid">
+          <article class="role"><span>01</span><h4>Ketua</h4><p>Mengarahkan arah gerak dan memimpin program utama.</p></article>
+          <article class="role"><span>02</span><h4>Wakil Ketua</h4><p>Mendampingi koordinasi internal dan pelaksanaan program.</p></article>
+          <article class="role"><span>03</span><h4>Sekretaris</h4><p>Mengelola administrasi, data, dan persiapan kegiatan.</p></article>
+          <article class="role"><span>04</span><h4>Bendahara</h4><p>Menjaga kelancaran anggaran dan kebutuhan organisasi.</p></article>
+          <article class="role"><span>05</span><h4>Humas</h4><p>Menghubungkan JAMAS dengan siswa, sekolah, dan publik.</p></article>
+          <article class="role"><span>06</span><h4>Koordinator Program</h4><p>Merancang dan menjaga keberlanjutan kegiatan.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 · PROGRAM -->
+    <section class="program section" id="program" aria-labelledby="program-title">
+      <div class="wrap program__head">
+        <div class="sec-head">
+          <span class="sec-num">03</span>
+          <span class="sec-label">Program Kami</span>
+          <span class="sec-note">Ruang untuk bertumbuh</span>
+        </div>
+        <div class="program__intro-grid">
+          <h2 class="sec-title" id="program-title" data-lines>
+            <span class="line"><span>Ruang untuk</span></span>
+            <span class="line"><span><em>bertumbuh</em></span></span>
+            <span class="line"><span>dan berdampak.</span></span>
+          </h2>
+          <div class="program__intro-copy" data-reveal>
+            <p>Lima arah gerak yang membuat JAMAS tetap hidup: dari kajian, pelayanan, pendidikan, hingga regenerasi.</p>
+            <p class="program__meta"><span>Kajian rutin</span> Jumat · 19.30 WIB</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="program__viewport" data-horizontal="program">
+        <div class="program__track" data-track>
+          <article class="program-card">
+            <div class="program-card__media">
+              <img src="images/opt/kais.jpg" width="707" height="1000" alt="Poster KAIS, Kajian Islam JAMAS" loading="lazy">
+              <span class="program-card__status">Rutin</span>
+            </div>
+            <div class="program-card__body">
+              <span class="program-card__no">01</span>
+              <h3>KAIS</h3>
+              <p class="program-card__sub">Kajian Islam</p>
+              <p>Kajian rutin yang menghadirkan pembahasan keislaman, akhlak, dan kehidupan sosial agar semangat ibadah terus tumbuh.</p>
+              <ul><li>Kajian mingguan</li><li>Diskusi tematik</li><li>Pembinaan akhlak</li></ul>
+            </div>
+          </article>
+
+          <article class="program-card">
+            <div class="program-card__media">
+              <img src="images/opt/blog-kiri.jpg" width="330" height="413" alt="Poster kampanye kebaikan JAMAS" loading="lazy">
+              <span class="program-card__status">Berkelanjutan</span>
+            </div>
+            <div class="program-card__body">
+              <span class="program-card__no">02</span>
+              <h3>Bakti Sosial</h3>
+              <p class="program-card__sub">Kepedulian yang bergerak</p>
+              <p>Menebar manfaat melalui kegiatan sosial dan kepedulian terhadap sesama, dari aksi kecil hingga bantuan yang terasa.</p>
+              <ul><li>Berbagi paket</li><li>Kunjungan</li><li>Aksi peduli</li></ul>
+            </div>
+          </article>
+
+          <article class="program-card">
+            <div class="program-card__media">
+              <img src="images/opt/blog-tengah.jpg" width="330" height="413" alt="Poster pembinaan ibadah harian JAMAS" loading="lazy">
+              <span class="program-card__status">Pembinaan</span>
+            </div>
+            <div class="program-card__body">
+              <span class="program-card__no">03</span>
+              <h3>Bakti Pendidikan</h3>
+              <p class="program-card__sub">Belajar, tumbuh, berbagi</p>
+              <p>Pembinaan literasi, karakter, dan pengembangan diri dalam lingkungan sekolah dan pesantren.</p>
+              <ul><li>Pendampingan belajar</li><li>Literasi</li><li>Pengembangan diri</li></ul>
+            </div>
+          </article>
+
+          <article class="program-card">
+            <div class="program-card__media">
+              <img src="images/opt/safari.jpg" width="1024" height="964" alt="Dokumentasi Safari Ramadan JAMAS" loading="lazy">
+              <span class="program-card__status">Tahunan</span>
+            </div>
+            <div class="program-card__body">
+              <span class="program-card__no">04</span>
+              <h3>Bakti Agama</h3>
+              <p class="program-card__sub">Menghidupkan momen</p>
+              <p>Menghidupkan kegiatan keagamaan dan momen spiritual bersama, termasuk Safari Ramadan dan peringatan hari besar.</p>
+              <ul><li>Safari Ramadan</li><li>Peringatan hari besar</li><li>Tadarus</li></ul>
+            </div>
+          </article>
+
+          <article class="program-card">
+            <div class="program-card__media">
+              <img src="images/opt/blog-kanan.jpg" width="330" height="413" alt="Poster pembinaan konsistensi ibadah JAMAS" loading="lazy">
+              <span class="program-card__status">Komunitas</span>
+            </div>
+            <div class="program-card__body">
+              <span class="program-card__no">05</span>
+              <h3>Komunitas</h3>
+              <p class="program-card__sub">Solidaritas & regenerasi</p>
+              <p>Menguatkan solidaritas, semangat gotong royong, dan kebersamaan antaranggota dan warga sekolah.</p>
+              <ul><li>Kaderisasi</li><li>Gotong royong</li><li>Kolaborasi</li></ul>
+            </div>
+          </article>
+
+          <article class="program__cta-card">
+            <span class="eyebrow">Punya aspirasi?</span>
+            <h3>Sampaikan lewat Form Pengaduan.</h3>
+            <p>Ruang aman untuk menyampaikan masukan, kritik, dan ide bagi JAMAS yang lebih baik.</p>
+            <a class="btn btn--dark" href="program-kami.html#form" data-form-open><span>Buka form</span><svg width="16" height="16" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+          </article>
+        </div>
+        <div class="h-scroll" aria-hidden="true"><span></span></div>
+      </div>
+    </section>
+
+    <!-- 04 · GALERI -->
+    <section class="gallery section" id="galeri" aria-labelledby="gallery-title">
+      <div class="wrap gallery__head">
+        <div class="sec-head">
+          <span class="sec-num">04</span>
+          <span class="sec-label">Galeri</span>
+          <span class="sec-note">Jejak yang tertinggal</span>
+        </div>
+        <div class="gallery__intro-grid">
+          <h2 class="sec-title" id="gallery-title" data-lines>
+            <span class="line"><span>Jejak yang</span></span>
+            <span class="line"><span><em>tertinggal.</em></span></span>
+          </h2>
+          <div class="gallery__intro-copy" data-reveal>
+            <p>Dokumentasi kegiatan, poster, dan momen kebersamaan JAMAS Matsanewa. <span class="gallery__hint">Klik untuk melihat lebih dekat.</span></p>
+            <a class="link-arrow" href="https://www.instagram.com/jamas_matsanewa" target="_blank" rel="noopener">Lihat semua di Instagram<svg width="16" height="16" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery__viewport" data-horizontal="gallery">
+        <div class="gallery__overlay" aria-hidden="true">
+          <span>05 / Galeri</span>
+          <span>Arsip visual · JAMAS Matsanewa</span>
+        </div>
+        <div class="gallery__track" data-track>
+          <button class="gallery__item gallery__item--wide" type="button" data-lightbox data-full="images/opt/isra.jpg" data-caption="Isra Mi'raj 1446 H · Masjid Al-Fajr">
+            <span class="gallery__frame"><img src="images/opt/isra.jpg" width="1500" height="1000" alt="Penceramah pada peringatan Isra Mi'raj JAMAS" loading="lazy"></span>
+            <span class="gallery__cap"><span>01</span>Isra Mi'raj · Masjid Al-Fajr</span>
+          </button>
+
+          <button class="gallery__item gallery__item--tall" type="button" data-lightbox data-full="images/opt/safari.jpg" data-caption="Safari Ramadan · 18 Maret 2025">
+            <span class="gallery__frame"><img src="images/opt/safari.jpg" width="1024" height="964" alt="Kolase dokumentasi Safari Ramadan JAMAS" loading="lazy"></span>
+            <span class="gallery__cap"><span>02</span>Safari Ramadan 2025</span>
+          </button>
+
+          <button class="gallery__item" type="button" data-lightbox data-full="images/opt/kais.jpg" data-caption="KAIS · Kajian Islam JAMAS">
+            <span class="gallery__frame"><img src="images/opt/kais.jpg" width="707" height="1000" alt="Poster KAIS JAMAS" loading="lazy"></span>
+            <span class="gallery__cap"><span>03</span>KAIS · Kajian Islam</span>
+          </button>
+
+          <button class="gallery__item" type="button" data-lightbox data-full="images/opt/blog-kiri.jpg" data-caption="Setiap langkah menuju kebaikan">
+            <span class="gallery__frame"><img src="images/opt/blog-kiri.jpg" width="330" height="413" alt="Poster JAMAS tentang langkah menuju kebaikan" loading="lazy"></span>
+            <span class="gallery__cap"><span>04</span>Langkah menuju kebaikan</span>
+          </button>
+
+          <button class="gallery__item gallery__item--wide" type="button" data-lightbox data-full="images/opt/blog-tengah.jpg" data-caption="Jadikan ibadah sebagai rutinitas harian">
+            <span class="gallery__frame"><img src="images/opt/blog-tengah.jpg" width="330" height="413" alt="Poster JAMAS tentang ibadah sebagai rutinitas" loading="lazy"></span>
+            <span class="gallery__cap"><span>05</span>Ibadah sebagai rutinitas</span>
+          </button>
+
+          <button class="gallery__item" type="button" data-lightbox data-full="images/opt/blog-kanan.jpg" data-caption="Cara konsisten beribadah setelah Ramadan">
+            <span class="gallery__frame"><img src="images/opt/blog-kanan.jpg" width="330" height="413" alt="Poster JAMAS tentang konsistensi beribadah" loading="lazy"></span>
+            <span class="gallery__cap"><span>06</span>Konsisten setelah Ramadan</span>
+          </button>
+
+          <button class="gallery__item gallery__item--portrait" type="button" data-lightbox data-full="images/opt/naira.jpg" data-caption="Naira Ezza F. · Kandidat Ketua JAMAS 2026">
+            <span class="gallery__frame"><img src="images/opt/naira.jpg" width="601" height="900" alt="Potret Naira Ezza F." loading="lazy"></span>
+            <span class="gallery__cap"><span>07</span>Naira Ezza F.</span>
+          </button>
+
+          <button class="gallery__item gallery__item--portrait" type="button" data-lightbox data-full="images/opt/jauza.jpg" data-caption="Jauza Absal D. · Kandidat Ketua JAMAS 2026">
+            <span class="gallery__frame"><img src="images/opt/jauza.jpg" width="675" height="900" alt="Potret Jauza Absal D." loading="lazy"></span>
+            <span class="gallery__cap"><span>08</span>Jauza Absal D.</span>
+          </button>
+        </div>
+        <div class="h-scroll" aria-hidden="true"><span></span></div>
+      </div>
+    </section>
+
+    <div class="ticker ticker--forest" aria-hidden="true">
+      <div class="ticker__track ticker__track--reverse">
+        <span>Dokumentasi</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Kebersamaan</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Pelayanan</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Pertumbuhan</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Dokumentasi</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Kebersamaan</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Pelayanan</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
+        <span>Pertumbuhan</span><svg width="12" height="12"><use href="#i-star8"></use></svg>
       </div>
     </div>
-  </section>
+  </main>
 
-  <section id="anggota" class="team_section layout_padding">
-    <div class="container">
-      <div class="heading_container text-center">
-        <h2>Anggota JAMAS</h2>
+  <footer class="footer" id="kontak">
+    <div class="wrap footer__top">
+      <div class="footer__cta" data-reveal>
+        <span class="eyebrow eyebrow--gold">Terhubung dengan kami</span>
+        <h2>Mari bertumbuh <em>bersama.</em></h2>
+        <p>Ikuti gerak kegiatan JAMAS, dari kajian rutin hingga aksi sosial di sekitar kita.</p>
+        <a class="btn btn--gold" href="https://www.instagram.com/jamas_matsanewa" target="_blank" rel="noopener"><span>Ikuti @jamas_matsanewa</span><svg width="16" height="16" aria-hidden="true"><use href="#i-instagram"></use></svg></a>
       </div>
 
-      <div class="row">
-        <div class="col-md-6 col-lg-3">
-          <div class="member-card">
-            <div class="member-photo">
-              <img src="images/slider logo jamas.png" alt="Ketua JAMAS" />
-            </div>
-            <h5>Ketua</h5>
-            <p>Koordinator kegiatan dan penggerak program utama.</p>
-          </div>
-        </div>
+      <nav class="footer__nav" aria-label="Navigasi footer">
+        <span class="eyebrow">Jelajahi</span>
+        <a href="#home">Home</a>
+        <a href="#tentang">Tentang</a>
+        <a href="#anggota">Anggota</a>
+        <a href="#program">Program Kami</a>
+        <a href="#galeri">Galeri</a>
+        <a href="program-kami.html#form" data-form-open>Form Pengaduan</a>
+      </nav>
 
-        <div class="col-md-6 col-lg-3">
-          <div class="member-card">
-            <div class="member-photo">
-              <img src="images/slider kais-new.jpeg" alt="Wakil Ketua JAMAS" />
-            </div>
-            <h5>Wakil Ketua</h5>
-            <p>Menangani koordinasi internal dan pendampingan program.</p>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-3">
-          <div class="member-card">
-            <div class="member-photo">
-              <img src="images/Blog Tengah.png" alt="Sekretaris JAMAS" />
-            </div>
-            <h5>Sekretaris</h5>
-            <p>Mengelola administrasi, data, dan persiapan kegiatan.</p>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-3">
-          <div class="member-card">
-            <div class="member-photo">
-              <img src="images/Blog Kiri.png" alt="Bendahara JAMAS" />
-            </div>
-            <h5>Bendahara</h5>
-            <p>Menjaga kelancaran anggaran dan kebutuhan organisasi.</p>
-          </div>
-        </div>
+      <div class="footer__contact">
+        <span class="eyebrow">Temukan kami</span>
+        <a href="https://www.instagram.com/jamas_matsanewa" target="_blank" rel="noopener"><svg width="16" height="16" aria-hidden="true"><use href="#i-instagram"></use></svg><span>@jamas_matsanewa</span></a>
+        <a href="https://drive.google.com/drive/folders/1LJozjash9RTangbwqQFqVfeotC8sX5Lj?usp=sharing" target="_blank" rel="noopener"><svg width="16" height="16" aria-hidden="true"><use href="#i-drive"></use></svg><span>Drive JAMAS</span></a>
+        <a href="https://maps.app.goo.gl/8diYYJscoifqPd9g9" target="_blank" rel="noopener"><svg width="16" height="16" aria-hidden="true"><use href="#i-map"></use></svg><span>Masjid Al-Fajr,<br>MTsN 1 Kota Malang</span></a>
       </div>
     </div>
-  </section>
 
-  <section id="updates" class="blog_section layout_padding">
-    <div class="container">
-      <div class="heading_container text-center">
-        <h2>Update Terbaru</h2>
-      </div>
+    <div class="footer__word" aria-hidden="true">JAMAS</div>
 
-      <div class="row">
-        <div class="col-md-6 col-lg-4 mx-auto">
-          <div class="box">
-            <div class="img-box">
-              <img src="images/Blog Kanan.png" alt="Update kegiatan JAMAS" />
-            </div>
-            <div class="detail-box">
-              <span class="meta-date">12 Oktober 2026</span>
-              <h5>Kajian Rutin JAMAS</h5>
-              <p>
-                Kajian mingguan dengan tema peningkatan keimanan, akhlak, dan semangat ibadah dalam kehidupan sehari-hari.
-              </p>
-              <a href="https://www.instagram.com/jamas_matsanewa">Baca Selengkapnya</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4 mx-auto">
-          <div class="box">
-            <div class="img-box">
-              <img src="images/Blog Tengah.png" alt="Program bakti sosial JAMAS" />
-            </div>
-            <div class="detail-box">
-              <span class="meta-date">05 Oktober 2026</span>
-              <h5>Bakti Sosial & Pengabdian</h5>
-              <p>
-                Kegiatan berbagi dan membantu masyarakat dengan semangat kepedulian, kebersamaan, dan nilai-nilai kemanusiaan.
-              </p>
-              <a href="program-kami.html#bakti-sosial">Baca Selengkapnya</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4 mx-auto">
-          <div class="box">
-            <div class="img-box">
-              <img src="images/Blog Kiri.png" alt="Agenda kegiatan JAMAS" />
-            </div>
-            <div class="detail-box">
-              <span class="meta-date">28 September 2026</span>
-              <h5>Agenda Ramadan & Kegiatan Keagamaan</h5>
-              <p>
-                Kegiatan ramadhan yang menghadirkan keberkahan, edukasi, dan suasana religius bagi seluruh komunitas.
-              </p>
-              <a href="https://www.instagram.com/jamas_matsanewa">Baca Selengkapnya</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="agenda" class="agenda_section layout_padding2">
-    <div class="container">
-      <div class="heading_container text-center">
-        <h2>Agenda & Kegiatan</h2>
-      </div>
-
-      <div class="agenda-wrapper">
-        <div class="agenda-item">
-          <div class="agenda-date">Senin</div>
-          <div class="agenda-content">
-            <h5>Kajian Pagi</h5>
-            <p>Diskusi keagamaan dan pembinaan akhlak di masjid.</p>
-          </div>
-        </div>
-
-        <div class="agenda-item">
-          <div class="agenda-date">Rabu</div>
-          <div class="agenda-content">
-            <h5>Pembinaan Komunitas</h5>
-            <p>Program peningkatan semangat dan literasi spiritual.</p>
-          </div>
-        </div>
-
-        <div class="agenda-item">
-          <div class="agenda-date">Jumat</div>
-          <div class="agenda-content">
-            <h5>Kegiatan Keagamaan</h5>
-            <p>Aktivitas yang menguatkan sikap religius dan kebersamaan.</p>
-          </div>
-        </div>
-
-        <div class="agenda-item">
-          <div class="agenda-date">Minggu</div>
-          <div class="agenda-content">
-            <h5>Bakti Sosial</h5>
-            <p>Pelaksanaan pengabdian yang menyentuh kebutuhan masyarakat.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="programs" class="program_section layout_padding long_section">
-    <div class="container">
-      <div class="heading_container text-center">
-        <h2>Program JAMAS</h2>
-      </div>
-
-      <div class="row program-grid">
-        <div class="col-md-6 col-lg-3">
-          <div class="program-card">
-            <i class="fa fa-book" aria-hidden="true"></i>
-            <h5>Keagamaan</h5>
-            <p>Program yang mendukung pembinaan iman, ibadah, dan pemahaman agama.</p>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="program-card">
-            <i class="fa fa-heart" aria-hidden="true"></i>
-            <h5>Bakti Sosial</h5>
-            <p>Menebar manfaat melalui kegiatan sosial dan kepedulian terhadap sesama.</p>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="program-card">
-            <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-            <h5>Pendidikan</h5>
-            <p>Pembinaan literasi, karakter, dan pengembangan diri dalam lingkungan pesantren dan sekolah.</p>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3">
-          <div class="program-card">
-            <i class="fa fa-users" aria-hidden="true"></i>
-            <h5>Komunitas</h5>
-            <p>Menguatkan solidaritas, semangat gotong royong, dan kebersamaan.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="galeri" class="gallery_section layout_padding">
-    <div class="container">
-      <div class="heading_container text-center">
-        <h2>Galeri JAMAS</h2>
-      </div>
-
-      <div class="row gallery-grid">
-        <div class="col-md-4">
-          <div class="gallery-card">
-            <img src="images/slider logo jamas.png" alt="Galeri JAMAS 1" />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="gallery-card">
-            <img src="images/slider kais-new.jpeg" alt="Galeri JAMAS 2" />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="gallery-card">
-            <img src="images/Blog Kanan.png" alt="Galeri JAMAS 3" />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="gallery-card">
-            <img src="images/Blog Tengah.png" alt="Galeri JAMAS 4" />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="gallery-card">
-            <img src="images/Blog Kiri.png" alt="Galeri JAMAS 5" />
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="gallery-card">
-            <img src="images/slider safari ramadan" alt="Galeri JAMAS 6" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="info_section long_section">
-    <div class="container">
-      <div class="contact_nav">
-        <a href="https://www.instagram.com/jamas_matsanewa">
-          <i class="fa fa-instagram" aria-hidden="true"></i>
-          <span>@jamas_matsanewa</span>
-        </a>
-        <a href="https://drive.google.com/drive/folders/1LJozjash9RTangbwqQFqVfeotC8sX5Lj?usp=sharing">
-          <i class="fa fa-folder-open" aria-hidden="true"></i>
-          <span>Drive JAMAS</span>
-        </a>
-        <a href="https://maps.app.goo.gl/8diYYJscoifqPd9g9">
-          <i class="fa fa-map-marker" aria-hidden="true"></i>
-          <span>Masjid Al-Fajr, MTsN 1 Kota Malang</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer_section">
-    <div class="container">
-      <p>
-        &copy; <span id="displayYear"></span>
-        <a href="https://jamasmatsanewa.me/">JAMAS Matsanewa</a>
-      </p>
+    <div class="wrap footer__bottom">
+      <p>© <span data-year>2026</span> JAMAS Matsanewa. Tumbuh dari masjid, bergerak untuk kehidupan.</p>
+      <a class="footer__top-link" href="#home">Kembali ke atas <svg width="14" height="14" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
     </div>
   </footer>
 
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/bootstrap.js"></script>
-  <script src="js/custom.js"></script>
-</body>
+  <dialog class="lightbox" id="lightbox" aria-labelledby="lightbox-caption">
+    <div class="lightbox__inner">
+      <button class="lightbox__close" type="button" data-lightbox-close aria-label="Tutup galeri"><svg width="22" height="22" aria-hidden="true"><use href="#i-close"></use></svg></button>
+      <div class="lightbox__stage"><img class="lightbox__img" alt=""></div>
+      <div class="lightbox__foot">
+        <p id="lightbox-caption"></p>
+        <div class="lightbox__nav">
+          <button type="button" data-lightbox-prev aria-label="Foto sebelumnya"><svg width="20" height="20" aria-hidden="true"><use href="#i-arrow-left"></use></svg></button>
+          <span class="lightbox__count" data-lightbox-count>01 / 08</span>
+          <button type="button" data-lightbox-next aria-label="Foto berikutnya"><svg width="20" height="20" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
+        </div>
+      </div>
+    </div>
+  </dialog>
 
+  <dialog class="form-dialog" id="form-dialog" aria-labelledby="form-title">
+    <div class="form-dialog__head">
+      <div>
+        <span class="eyebrow eyebrow--gold">Form Pengaduan</span>
+        <h2 id="form-title">Sampaikan aspirasimu.</h2>
+      </div>
+      <button class="form-dialog__close" type="button" data-form-close aria-label="Tutup form"><svg width="22" height="22" aria-hidden="true"><use href="#i-close"></use></svg></button>
+    </div>
+    <div class="form-dialog__body">
+      <iframe data-src="https://form.jotform.com/253012160367447" title="Form Pengaduan JAMAS" loading="lazy" allowfullscreen></iframe>
+      <noscript><a href="https://form.jotform.com/253012160367447" target="_blank" rel="noopener">Buka Form Pengaduan</a></noscript>
+    </div>
+  </dialog>
+
+  <script src="js/vendor/gsap.min.js" defer></script>
+  <script src="js/vendor/ScrollTrigger.min.js" defer></script>
+  <script src="js/vendor/lenis.min.js" defer></script>
+  <script src="js/jamas.js" defer></script>
+</body>
 </html>
