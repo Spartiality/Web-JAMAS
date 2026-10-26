@@ -287,17 +287,29 @@
           </h2>
           <p class="members__lede" data-reveal>Energi JAMAS datang dari siswa yang percaya bahwa kegiatan keagamaan bisa tumbuh bersama karya, pelayanan, dan kebersamaan.</p>
         </div>
+
+        <!-- Sub-header divisi: ketuk untuk membuka pilihan Agama / Humas -->
+        <div class="members__divbar" data-reveal>
+          <div class="divbar__left">
+            <span class="eyebrow eyebrow--gold">Divisi</span>
+            <span class="divbar__current" data-division-current>Semua anggota</span>
+          </div>
+          <button class="divbar__btn" type="button" data-division-open aria-haspopup="dialog" aria-controls="division-dialog">
+            <span>Pilih divisi</span>
+            <svg width="14" height="14" aria-hidden="true"><use href="#i-plus"></use></svg>
+          </button>
+        </div>
       </div>
 
       <div class="members__viewport" data-horizontal="members">
         <div class="members__track" data-track>
           <article class="members__text-card">
-            <span class="eyebrow eyebrow--gold">04 wajah · 01 gerakan</span>
+            <span class="eyebrow eyebrow--gold" data-members-count>10 wajah · 01 gerakan</span>
             <p>Setiap anggota membawa peran, gagasan, dan energi yang berbeda. Bersama, mereka menjaga JAMAS tetap hidup.</p>
             <span class="members__hint">Geser untuk bertemu mereka <svg width="16" height="16" aria-hidden="true"><use href="#i-arrow-right"></use></svg></span>
           </article>
 
-          <article class="member">
+          <article class="member" data-division="ketua">
             <div class="member__photo">
               <img src="images/opt/naila.jpg" width="600" height="900" alt="Potret Naila Afiqa P." loading="lazy">
               <span class="member__tag">Kandidat Ketua 2026</span>
@@ -309,7 +321,7 @@
             </div>
           </article>
 
-          <article class="member">
+          <article class="member" data-division="ketua">
             <div class="member__photo">
               <img src="images/opt/naira.jpg" width="601" height="900" alt="Potret Naira Ezza F." loading="lazy">
               <span class="member__tag">Kandidat Ketua 2026</span>
@@ -321,7 +333,7 @@
             </div>
           </article>
 
-          <article class="member">
+          <article class="member" data-division="ketua">
             <div class="member__photo">
               <img src="images/opt/kartika.jpg" width="675" height="900" alt="Potret Kartika Putri T." loading="lazy">
               <span class="member__tag">Kandidat Ketua 2026</span>
@@ -333,7 +345,7 @@
             </div>
           </article>
 
-          <article class="member">
+          <article class="member" data-division="ketua">
             <div class="member__photo">
               <img src="images/opt/jauza.jpg" width="675" height="900" alt="Potret Jauza Absal D." loading="lazy">
               <span class="member__tag">Kandidat Ketua 2026</span>
@@ -341,6 +353,80 @@
             <div class="member__meta">
               <span class="member__index">04</span>
               <div><h3>Jauza Absal D.</h3><p>Anggota JAMAS</p></div>
+              <svg class="member__arrow" width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+            </div>
+          </article>
+
+          <!-- Kartu contoh divisi · ganti nama, foto, tag, dan data-division sesuai anggota asli
+               Ketika sub-header "Pilih divisi" dipakai, hanya kartu dengan division yang cocok yang tampil. -->
+          <article class="member" data-division="agama">
+            <div class="member__photo">
+              <img src="images/opt/kais.jpg" width="675" height="900" alt="Kegiatan kajian keagamaan JAMAS" loading="lazy">
+              <span class="member__tag">Divisi Agama</span>
+            </div>
+            <div class="member__meta">
+              <span class="member__index">05</span>
+              <div><h3>Nama Anggota Agama</h3><p>Divisi Agama</p></div>
+              <svg class="member__arrow" width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+            </div>
+          </article>
+
+          <article class="member" data-division="agama">
+            <div class="member__photo">
+              <img src="images/opt/safari.jpg" width="675" height="900" alt="Kegiatan Safari Ramadan JAMAS" loading="lazy">
+              <span class="member__tag">Divisi Agama</span>
+            </div>
+            <div class="member__meta">
+              <span class="member__index">06</span>
+              <div><h3>Nama Anggota Agama</h3><p>Divisi Agama</p></div>
+              <svg class="member__arrow" width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+            </div>
+          </article>
+
+          <article class="member" data-division="humas">
+            <div class="member__photo">
+              <img src="images/opt/isra.jpg" width="675" height="900" alt="Dokumentasi kegiatan Isra Mi'raj JAMAS" loading="lazy">
+              <span class="member__tag">Divisi Humas</span>
+            </div>
+            <div class="member__meta">
+              <span class="member__index">07</span>
+              <div><h3>Nama Anggota Humas</h3><p>Divisi Humas</p></div>
+              <svg class="member__arrow" width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+            </div>
+          </article>
+
+          <article class="member" data-division="humas">
+            <div class="member__photo">
+              <img src="images/opt/blog-tengah.jpg" width="675" height="900" alt="Publikasi dan tulisan JAMAS" loading="lazy">
+              <span class="member__tag">Divisi Humas</span>
+            </div>
+            <div class="member__meta">
+              <span class="member__index">08</span>
+              <div><h3>Nama Anggota Humas</h3><p>Divisi Humas</p></div>
+              <svg class="member__arrow" width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+            </div>
+          </article>
+
+          <article class="member" data-division="pembina">
+            <div class="member__photo">
+              <img src="images/opt/blog-kiri.jpg" width="675" height="900" alt="Kegiatan pembinaan JAMAS" loading="lazy">
+              <span class="member__tag">Pembina</span>
+            </div>
+            <div class="member__meta">
+              <span class="member__index">09</span>
+              <div><h3>Nama Pembina</h3><p>Pembina JAMAS</p></div>
+              <svg class="member__arrow" width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+            </div>
+          </article>
+
+          <article class="member" data-division="inti">
+            <div class="member__photo">
+              <img src="images/opt/blog-kanan.jpg" width="675" height="900" alt="Pengurus inti JAMAS" loading="lazy">
+              <span class="member__tag">Pengurus Inti</span>
+            </div>
+            <div class="member__meta">
+              <span class="member__index">10</span>
+              <div><h3>Nama Anggota Inti</h3><p>Pengurus Inti</p></div>
               <svg class="member__arrow" width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
             </div>
           </article>
@@ -620,6 +706,43 @@
     <div class="form-dialog__body">
       <iframe data-src="https://form.jotform.com/253012160367447" title="Form Pengaduan JAMAS" loading="lazy" allowfullscreen></iframe>
       <noscript><a href="https://form.jotform.com/253012160367447" target="_blank" rel="noopener">Buka Form Pengaduan</a></noscript>
+    </div>
+  </dialog>
+
+  <dialog class="division-dialog" id="division-dialog" aria-labelledby="division-title">
+    <div class="division-dialog__head">
+      <div>
+        <span class="eyebrow eyebrow--gold">Divisi JAMAS</span>
+        <h2 id="division-title">Pilih yang ingin kamu intip.</h2>
+      </div>
+      <button class="division-dialog__close" type="button" data-division-close aria-label="Tutup pilihan divisi"><svg width="22" height="22" aria-hidden="true"><use href="#i-close"></use></svg></button>
+    </div>
+    <div class="division-dialog__body">
+      <button class="division-option is-active" type="button" data-division-pick="all">
+        <span class="division-option__num">01</span>
+        <div><h3>Semua anggota</h3><p>Seluruh wajah JAMAS dalam satu barisan.</p></div>
+        <svg width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+      </button>
+      <button class="division-option" type="button" data-division-pick="pembina">
+        <span class="division-option__num">02</span>
+        <div><h3>Pembina</h3><p>Arah, pembinaan, dan pelestarian organisasi.</p></div>
+        <svg width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+      </button>
+      <button class="division-option" type="button" data-division-pick="inti">
+        <span class="division-option__num">03</span>
+        <div><h3>Inti</h3><p>Pengurus inti, koordinasi harian, dan pengambilan keputusan.</p></div>
+        <svg width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+      </button>
+      <button class="division-option" type="button" data-division-pick="agama">
+        <span class="division-option__num">04</span>
+        <div><h3>Agama</h3><p>Kajian, ibadah, dan pembinaan kebersamaan keislaman.</p></div>
+        <svg width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+      </button>
+      <button class="division-option" type="button" data-division-pick="humas">
+        <span class="division-option__num">05</span>
+        <div><h3>Humas</h3><p>Publikasi, dokumentasi, dan hubungan dengan publik.</p></div>
+        <svg width="18" height="18" aria-hidden="true"><use href="#i-arrow"></use></svg>
+      </button>
     </div>
   </dialog>
 

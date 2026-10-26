@@ -325,6 +325,83 @@
   }
 
   /* -------------------------------------------------------
+     Divisi anggota: sub-header filter + pilihan popup
+     ------------------------------------------------------- */
+  const divisionDialog = $("#division-dialog");
+  const divisionOpenBtn = $("[data-division-open]");
+  const divisionCurrent = $("[data-division-current]");
+  const divisionOptions = divisionDialog ? $$("[data-division-pick]", divisionDialog) : [];
+  const memberCards = $$(".member");
+  const memberCountLabel = $("[data-members-count]");
+  let lastDivisionFocus = null;
+
+  const DIVISION_LABEL = {
+    all: "Semua anggota",
+    agama: "Divisi Agama",
+    humas: "Divisi Humas",
+    pembina: "Pembina",
+    inti: "Pengurus Inti"
+  };
+
+  function openDivisionDialog() {
+    if (!divisionDialog || divisionDialog.open) return;
+    lastDivisionFocus = document.activeElement;
+    divisionDialog.showModal();
+    syncDialogLock();
+    $("[data-division-close]", divisionDialog)?.focus();
+  }
+
+  function closeDivisionDialog() {
+    if (divisionDialog && divisionDialog.open) divisionDialog.close();
+  }
+
+  function applyDivision(key) {
+    memberCards.forEach((card) => {
+      const match = key === "all" || card.getAttribute("data-division") === key;
+      card.classList.toggle("is-hidden", !match);
+    });
+
+    const visible = memberCards.filter((card) => !card.classList.contains("is-hidden"));
+    visible.forEach((card, index) => {
+      const indexEl = $(".member__index", card);
+      if (indexEl) indexEl.textContent = String(index + 1).padStart(2, "0");
+    });
+
+    divisionOptions.forEach((option) => {
+      option.classList.toggle("is-active", option.getAttribute("data-division-pick") === key);
+    });
+
+    if (divisionCurrent) divisionCurrent.textContent = DIVISION_LABEL[key] || DIVISION_LABEL.all;
+    if (memberCountLabel) {
+      memberCountLabel.textContent =
+        String(visible.length).padStart(2, "0") + " wajah · 01 gerakan";
+    }
+
+    /* Track anggota berubah ukuran — hitung ulang pin horizontal */
+    if (window.ScrollTrigger) ScrollTrigger.refresh();
+  }
+
+  if (divisionDialog) {
+    if (divisionOpenBtn) divisionOpenBtn.addEventListener("click", openDivisionDialog);
+
+    divisionOptions.forEach((option) => {
+      option.addEventListener("click", () => {
+        applyDivision(option.getAttribute("data-division-pick"));
+        closeDivisionDialog();
+      });
+    });
+
+    $("[data-division-close]", divisionDialog)?.addEventListener("click", closeDivisionDialog);
+    divisionDialog.addEventListener("click", (event) => {
+      if (event.target === divisionDialog) divisionDialog.close();
+    });
+    divisionDialog.addEventListener("close", () => {
+      syncDialogLock();
+      if (lastDivisionFocus) lastDivisionFocus.focus({ preventScroll: true });
+    });
+  }
+
+  /* -------------------------------------------------------
      Year
      ------------------------------------------------------- */
   $$("[data-year]").forEach((el) => {
