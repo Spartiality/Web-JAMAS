@@ -376,9 +376,21 @@
       memberCountLabel.textContent =
         String(visible.length).padStart(2, "0") + " wajah · 01 gerakan";
     }
+    /* Tidak me-refresh di sini — scene di-reset dulu (lihat resetMembersScene)
+       supaya pengguna tidak dipaksa keluar dari pin secara tiba-tiba. */
+  }
 
-    /* Track anggota berubah ukuran — hitung ulang pin horizontal */
-    if (window.ScrollTrigger) ScrollTrigger.refresh();
+  const membersHeadEl = $(".members__head");
+
+  /* Kembali ke tampilan awal barisan anggota setelah memilih divisi,
+     sama seperti efek sebelum dimasukkannya filter. */
+  function resetMembersScene() {
+    if (membersHeadEl) {
+      window.setTimeout(() => scrollToTarget(membersHeadEl), 140);
+    }
+    if (window.ScrollTrigger) {
+      window.setTimeout(() => ScrollTrigger.refresh(), 1000);
+    }
   }
 
   if (divisionDialog) {
@@ -388,6 +400,7 @@
       option.addEventListener("click", () => {
         applyDivision(option.getAttribute("data-division-pick"));
         closeDivisionDialog();
+        resetMembersScene();
       });
     });
 
@@ -479,7 +492,7 @@
   $$("[data-lines]").forEach((heading) => {
     const lines = $$(".line > span", heading);
     gsap.from(lines, {
-      yPercent: 112,
+      yPercent: 132,
       duration: 1.05,
       ease: "power4.out",
       stagger: 0.09,

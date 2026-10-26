@@ -796,8 +796,8 @@ button { cursor: pointer; }
 .line {
   display: block;
   overflow: hidden;
-  padding-bottom: 0.09em;
-  margin-bottom: -0.09em;
+  padding: 0.02em 0.12em 0.16em;
+  margin: -0.02em -0.12em -0.16em;
 }
 .line > span { display: block; }
 
@@ -1388,6 +1388,7 @@ button { cursor: pointer; }
 }
 .program-card__sub { font-family: var(--font-serif); font-style: italic; font-size: 1rem; color: var(--forest-700); }
 .program-card__body > p:not(.program-card__sub) { margin-top: 0.9rem; color: #3f5147; font-size: 0.89rem; line-height: 1.65; }
+.program-card__body .btn { margin-top: auto; align-self: flex-start; }
 .program-card ul { margin-top: 1.1rem; border-top: 1px solid var(--line); }
 .program-card li {
   display: flex;
