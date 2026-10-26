@@ -1437,6 +1437,34 @@ button { cursor: pointer; }
 .program__cta-card p { position: relative; margin-bottom: 1.7rem; color: rgba(244, 237, 221, 0.68); font-size: 0.9rem; line-height: 1.65; }
 .program__cta-card .btn { position: relative; align-self: flex-start; }
 
+/* E-Voter: satu keluarga dengan kartu Form Pengaduan, pola dekor berbeda */
+.program__cta-card--evoter { background: var(--forest-800); }
+.program__cta-card--evoter::before {
+  top: 0.85rem;
+  right: 0.85rem;
+  bottom: 0.85rem;
+  left: 0.85rem;
+  width: auto;
+  height: auto;
+  border: 1px dashed rgba(198, 161, 91, 0.5);
+  border-radius: 6px;
+  background: none;
+  transition: border-color 0.4s;
+}
+.program__cta-card--evoter:hover::before { border-color: rgba(198, 161, 91, 0.85); }
+.evoter__star {
+  position: absolute;
+  top: -1.4rem;
+  right: -1.4rem;
+  width: 6.4rem;
+  height: 6.4rem;
+  color: var(--gold);
+  opacity: 0.55;
+  transition: transform 0.6s var(--ease), opacity 0.4s;
+  pointer-events: none;
+}
+.program__cta-card--evoter:hover .evoter__star { transform: rotate(26deg) scale(1.08); opacity: 0.8; }
+
 /* ---------------------------------------------------------
    Gallery
    --------------------------------------------------------- */
