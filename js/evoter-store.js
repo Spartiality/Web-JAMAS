@@ -1,239 +1,381 @@
 /* ============================================================
- * E-Voter — Lapisan Penyimpanan (localStorage)
- * Semua data aplikasi kelola di sini, supaya mudah
- * diganti ke backend lain (Firebase/Supabase/API) nantinya.
+ * E-Voter — Lapisan Penyimpanan
+ * Mode A: Firebase Realtime Database → hasil suara TERPUSAT,
+ *         terkumpul dari semua perangkat secara real-time.
+ * Mode B: localStorage → demo lokal (satu browser saja).
+ *
+ * Pilihan mode ada di js/evoter-config.js (EV_FIREBASE.enabled).
  * ============================================================ */
 
 const EV = (() => {
-  const KEY = 'evoter_db_v1';
+  const KEY = 'evoter_db_v2';
+  const SESSION_KEY = 'evoter_session_v2';
+  const MODE = (typeof EV_FIREBASE !== 'undefined' && EV_FIREBASE.enabled && EV_FIREBASE.databaseURL)
+    ? 'firebase' : 'local';
+  const isFirebase = () => MODE === 'firebase';
 
+  const fbdb = MODE === 'firebase' ? firebase.database() : null;
+  const r = (p) => fbdb.ref('evoter/' + p);
+
+  /* ---------- util ---------- */
+  function hash(str) { // hash sederhana utk PIN/password (bukan kriptografi kuat)
+    let h = 5381;
+    for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) >>> 0;
+    return 'h' + h.toString(36);
+  }
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  const generatePin = () => String(Math.floor(1000 + Math.random() * 9000));
+
+  /* ============================================================
+   * MODE LOKAL (localStorage)
+   * ============================================================ */
   const defaultDB = () => ({
-    election: {
-      title: 'Pemilihan Ketua OSIS 2026',
-      desc: 'Pilih kandidat terbaikmu!',
-      status: 'closed', // 'closed' | 'open'
-      openedAt: null,
-      closedAt: null,
-    },
-    admin: { username: 'admin', password: 'admin123' },
-    candidates: [], // { id, no, name, kelas, photo, visi, misi }
-    voters: [],     // { id, nis, name, pin, hasVoted, votedAt }
-    votes: [],      // { id, voterId, nis, name, candidateId, timestamp }
-    session: null,  // nis voter yang sedang login
+    election: { title: 'Pemilihan Ketua JAMAS 2026', desc: '', status: 'closed', openedAt: null, closedAt: null },
+    admin: { username: 'admin', passHash: hash('admin123') },
+    candidates: [], voters: [], votes: [], session: null,
   });
+  let db = MODE === 'local' ? loadLocal() : null;
 
-  function load() {
+  function loadLocal() {
     try {
       const raw = localStorage.getItem(KEY);
       if (raw) return { ...defaultDB(), ...JSON.parse(raw) };
     } catch (e) { /* corrupt -> reset */ }
     return defaultDB();
   }
+  function saveLocal() { localStorage.setItem(KEY, JSON.stringify(db)); }
 
-  let db = load();
-
-  function save() {
-    localStorage.setItem(KEY, JSON.stringify(db));
+  /* ============================================================
+   * PEMILIHAN
+   * ============================================================ */
+  async function getElection() {
+    if (MODE === 'firebase') {
+      const s = await r('election/meta').get();
+      return s.exists() ? { status: 'closed', ...s.val() } : defaultLocalElection();
+    }
+    return { ...db.election };
   }
-
-  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-
-  /* ---------- Election ---------- */
-  function getElection() { return { ...db.election }; }
-  function setElection(patch) {
+  function defaultLocalElection() {
+    return { title: 'Pemilihan Ketua JAMAS 2026', desc: '', status: 'closed', openedAt: null, closedAt: null };
+  }
+  async function setElection(patch) {
+    if (MODE === 'firebase') {
+      await r('election/meta').update(patch);
+      return;
+    }
     db.election = { ...db.election, ...patch };
-    save();
+    saveLocal();
   }
-  function openElection() {
-    setElection({ status: 'open', openedAt: Date.now(), closedAt: null });
+  async function openElection() {
+    await setElection({ status: 'open', openedAt: Date.now(), closedAt: null });
   }
-  function closeElection() {
-    setElection({ status: 'closed', closedAt: Date.now() });
+  async function closeElection() {
+    await setElection({ status: 'closed', closedAt: Date.now() });
   }
 
-  /* ---------- Admin auth ---------- */
-  function adminLogin(username, password) {
-    const ok = username === db.admin.username && password === db.admin.password;
+  /* ============================================================
+   * AKUN ADMIN
+   * ============================================================ */
+  async function adminLogin(username, password) {
+    if (MODE === 'firebase') {
+      await ensureAdminSeed();
+      const s = await r('election/admin').get();
+      const a = s.val();
+      const ok = a && username === a.username && hash(password) === a.passHash;
+      if (ok) sessionStorage.setItem('evoter_admin', '1');
+      return ok;
+    }
+    const ok = username === db.admin.username && hash(password) === db.admin.passHash;
     if (ok) sessionStorage.setItem('evoter_admin', '1');
     return ok;
   }
-  function isAdmin() { return sessionStorage.getItem('evoter_admin') === '1'; }
+  async function ensureAdminSeed() {
+    const s = await r('election/admin').get();
+    if (!s.exists()) await r('election/admin').set({ username: 'admin', passHash: hash('admin123') });
+  }
+  const isAdmin = () => sessionStorage.getItem('evoter_admin') === '1';
   function adminLogout() { sessionStorage.removeItem('evoter_admin'); }
-  function updateAdmin(username, password) {
-    db.admin = { username, password };
-    save();
+  async function updateAdmin(username, password) {
+    const patch = { username: username || 'admin' };
+    if (password) patch.passHash = hash(password);
+    if (MODE === 'firebase') await r('election/admin').update(patch);
+    else { Object.assign(db.admin, patch); saveLocal(); }
   }
 
-  /* ---------- Kandidat ---------- */
-  function getCandidates() { return [...db.candidates].sort((a, b) => a.no - b.no); }
-  function addCandidate(c) {
-    const no = c.no != null && c.no !== ''
-      ? Number(c.no)
-      : (db.candidates.reduce((m, x) => Math.max(m, x.no), 0) + 1);
+  /* ============================================================
+   * KANDIDAT
+   * ============================================================ */
+  async function getCandidates() {
+    if (MODE === 'firebase') {
+      const s = await r('candidates').get();
+      if (!s.exists()) return [];
+      return Object.entries(s.val())
+        .map(([id, c]) => ({ id, ...c }))
+        .sort((a, b) => (a.no || 0) - (b.no || 0));
+    }
+    return [...db.candidates].sort((a, b) => a.no - b.no);
+  }
+  async function addCandidate(c) {
     const cand = {
-      id: uid(),
-      no,
+      no: c.no != null && c.no !== '' ? Number(c.no) : null, // null = autos nanti
       name: (c.name || '').trim(),
       kelas: (c.kelas || '').trim(),
       photo: (c.photo || '').trim(),
       visi: (c.visi || '').trim(),
       misi: (c.misi || '').trim(),
     };
-    db.candidates.push(cand);
-    save();
-    return cand;
+    if (MODE === 'firebase') {
+      if (cand.no == null) {
+        const s = await r('candidates').get();
+        const max = s.exists() ? Math.max(0, ...Object.values(s.val()).map(x => Number(x.no) || 0)) : 0;
+        cand.no = max + 1;
+        const ref = r('candidates').push();
+        await ref.set(cand);
+        return { id: ref.key, ...cand };
+      }
+      const ref = r('candidates').push();
+      await ref.set(cand);
+      return { id: ref.key, ...cand };
+    }
+    if (cand.no == null) cand.no = db.candidates.reduce((m, x) => Math.max(m, x.no), 0) + 1;
+    cand.no = Number(cand.no);
+    const saved = { id: uid(), ...cand };
+    db.candidates.push(saved);
+    saveLocal();
+    return saved;
   }
-  function updateCandidate(id, patch) {
-    const c = db.candidates.find(x => x.id === id);
-    if (!c) return null;
-    Object.assign(c, patch, { no: Number(patch.no ?? c.no) });
-    save();
-    return c;
-  }
-  function deleteCandidate(id) {
+  async function deleteCandidate(id) {
+    if (MODE === 'firebase') return r('candidates/' + id).remove();
     db.candidates = db.candidates.filter(x => x.id !== id);
-    save();
+    saveLocal();
   }
-  function deleteAllCandidates() {
+  async function deleteAllCandidates() {
+    if (MODE === 'firebase') return r('candidates').remove();
     db.candidates = [];
-    save();
+    saveLocal();
+  }
+  async function importCandidates(rows) {
+    let ok = 0; const errors = [];
+    for (let i = 0; i < rows.length; i++) {
+      if (!rows[i].name) { errors.push(`Baris ${i + 1}: nama kosong`); continue; }
+      await addCandidate(rows[i]); ok++;
+    }
+    return { ok, errors };
   }
 
-  /* ---------- Pemilih ---------- */
-  function getVoters() {
+  /* ============================================================
+   * PEMILIH (voters ber-key NIS — menghindari duplikat di DB)
+   * ============================================================ */
+  async function getVoters() {
+    if (MODE === 'firebase') {
+      const s = await r('voters').get();
+      if (!s.exists()) return [];
+      return Object.entries(s.val())
+        .map(([nis, v]) => ({ id: nis, ...v, nis }))
+        .sort((a, b) => a.nis.localeCompare(b.nis, undefined, { numeric: true }));
+    }
     return [...db.voters].sort((a, b) => a.nis.localeCompare(b.nis, undefined, { numeric: true }));
   }
-  function findVoter(nis) {
-    return db.voters.find(v => v.nis === String(nis).trim()) || null;
-  }
-  function addVoter({ nis, name, pin }) {
-    nis = String(nis).trim();
-    if (!nis) return { error: 'NIS kosong' };
-    if (db.voters.some(v => v.nis === nis)) return { error: `NIS ${nis} sudah terdaftar (duplikat di-skip)` };
-    const p = (pin == null || pin === '') ? generatePin() : String(pin).trim();
-    const voter = { id: uid(), nis, name: String(name || '').trim(), pin: p, hasVoted: false, votedAt: null };
-    db.voters.push(voter);
-    save();
-    return { voter };
-  }
-  function generatePin() {
-    return String(Math.floor(1000 + Math.random() * 9000));
-  }
-  function updateVoter(id, patch) {
-    const v = db.voters.find(x => x.id === id);
-    if (!v) return null;
-    if (patch.nis != null) {
-      const dup = db.voters.find(x => x.id !== id && x.nis === patch.nis.trim());
-      if (dup) return null;
+  async function voterExists(nis) {
+    if (MODE === 'firebase') {
+      const s = await r('voters/' + nis).get();
+      return s.exists();
     }
-    Object.assign(v, patch);
-    save();
-    return v;
+    return db.voters.some(v => v.nis === nis);
   }
-  function deleteVoter(id) {
-    db.voters = db.voters.filter(x => x.id !== id);
-    save();
+  async function addVoter({ nis, name, pin }) {
+    nis = String(nis || '').trim();
+    if (!nis) return { error: 'NIS kosong' };
+    if (await voterExists(nis)) return { error: `NIS ${nis} sudah terdaftar (duplikat di-skip)` };
+    const voter = {
+      nis, name: String(name || '').trim(),
+      pin: (pin == null || pin === '') ? generatePin() : String(pin).trim(),
+      hasVoted: false, votedAt: null,
+    };
+    if (MODE === 'firebase') await r('voters/' + nis).set(voter);
+    else { db.voters.push({ id: nis, ...voter }); saveLocal(); }
+    return { voter: { id: nis, ...voter } };
   }
-  function deleteAllVoters() {
+  async function deleteVoter(id) {
+    if (MODE === 'firebase') return r('voters/' + id).remove();
+    db.voters = db.voters.filter(v => v.id !== id);
+    saveLocal();
+  }
+  async function deleteAllVoters() {
+    if (MODE === 'firebase') return r('voters').remove();
     db.voters = [];
-    save();
+    saveLocal();
   }
-  function resetAllVotes() {
+  async function importVoters(rows) {
+    let ok = 0; const errors = [];
+    if (MODE === 'firebase') {
+      // ambil yang sudah ada dulu agar duplikat terdeteksi
+      const existing = await getVoters();
+      const have = new Set(existing.map(v => v.nis));
+      const batch = {};
+      rows.forEach((row, i) => {
+        const nis = String(row.nis || '').trim();
+        if (!nis) { errors.push(`Baris ${i + 1}: NIS kosong`); return; }
+        if (have.has(nis)) { errors.push(`Baris ${i + 1}: NIS ${nis} duplikat (di-skip)`); return; }
+        batch[nis] = {
+          nis, name: String(row.name || '').trim(),
+          pin: (row.pin == null || row.pin === '') ? generatePin() : String(row.pin).trim(),
+          hasVoted: false, votedAt: null,
+        };
+        have.add(nis); ok++;
+      });
+      if (Object.keys(batch).length) await r('voters').update(batch);
+      return { ok, errors };
+    }
+    for (let i = 0; i < rows.length; i++) {
+      const res = await addVoter(rows[i]);
+      if (res.error) errors.push(`Baris ${i + 1}: ${res.error}`); else ok++;
+    }
+    return { ok, errors };
+  }
+  async function resetAllVotes() {
+    if (MODE === 'firebase') {
+      const s = await r('voters').get();
+      const updates = {};
+      if (s.exists()) Object.entries(s.val()).forEach(([nis, v]) => {
+        updates[nis + '/hasVoted'] = false;
+        updates[nis + '/votedAt'] = null;
+      });
+      updates && Object.keys(updates).length && await r('voters').update(updates);
+      await r('votes').remove();
+      return;
+    }
     db.votes = [];
     db.voters.forEach(v => { v.hasVoted = false; v.votedAt = null; });
-    save();
+    saveLocal();
+  }
+  async function factoryReset() {
+    if (MODE === 'firebase') {
+      await r('/').remove();
+      await ensureAdminSeed();
+      await setElection(defaultLocalElection());
+      return;
+    }
+    localStorage.removeItem(KEY);
+    db = loadLocal();
+    saveLocal();
   }
 
-  /** Import massal kandidat dari array {no?, name, kelas?, ...} */
-  function importCandidates(rows) {
-    let ok = 0;
-    const errors = [];
-    rows.forEach((r, i) => {
-      if (!r.name) { errors.push(`Baris ${i + 1}: nama kosong`); return; }
-      addCandidate(r);
-      ok++;
-    });
-    return { ok, errors };
-  }
-
-  /** Import massal pemilih dari array {nis, name, pin?} */
-  function importVoters(rows) {
-    let ok = 0;
-    const errors = [];
-    rows.forEach((r, i) => {
-      const res = addVoter(r);
-      if (res.error) errors.push(`Baris ${i + 1}: ${res.error}`);
-      else ok++;
-    });
-    return { ok, errors };
-  }
-
-  /* ---------- Voting ---------- */
-  function voterLogin(nis, pin) {
-    const v = findVoter(nis);
+  /* ============================================================
+   * LOGIN VOTER + VOTING
+   * ============================================================ */
+  async function voterLogin(nis, pin) {
+    nis = String(nis || '').trim();
+    if (MODE === 'firebase') {
+      const s = await r('voters/' + nis).get();
+      if (!s.exists()) return { error: 'NIS tidak terdaftar' };
+      const v = s.val();
+      if (v.pin !== String(pin).trim()) return { error: 'PIN salah' };
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ nis, name: v.name }));
+      return { voter: { id: nis, nis, ...v } };
+    }
+    const v = db.voters.find(x => x.nis === nis);
     if (!v) return { error: 'NIS tidak terdaftar' };
     if (v.pin !== String(pin).trim()) return { error: 'PIN salah' };
-    db.session = v.id;
-    save();
-    return { voter: getVoterSession() };
+    db.session = v.id; saveLocal();
+    return { voter: { ...v } };
   }
   function getVoterSession() {
+    if (MODE === 'firebase') {
+      try {
+        const raw = localStorage.getItem(SESSION_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch { return null; }
+    }
     if (!db.session) return null;
     const v = db.voters.find(x => x.id === db.session);
     return v ? { ...v } : null;
   }
-  function voterLogout() { db.session = null; save(); }
+  function voterLogout() {
+    localStorage.removeItem(SESSION_KEY);
+    if (MODE === 'local') { db.session = null; saveLocal(); }
+  }
 
   /**
-   * Simpan suara. Identitas terekam (voterId, nis, name)
-   * sesuai kebutuhan audit panitia.
+   * Simpan suara (identitas terekam utk audit).
+   * Firebase: transaksi atomik pada voters/{nis}/hasVoted →
+   * mustahil double-vote meski dari dua perangkat bersamaan.
    */
-  function castVote(candidateId) {
-    const v = getVoterSession();
-    if (!v) return { error: 'Belum login' };
-    if (db.election.status !== 'open') return { error: 'Pemilihan sedang ditutup' };
+  async function castVote(candidateId) {
+    const s = getVoterSession();
+    if (!s) return { error: 'Belum login' };
+    const el = await getElection();
+    if (el.status !== 'open') return { error: 'Pemilihan sedang ditutup' };
+
+    if (MODE === 'firebase') {
+      const vref = r('voters/' + s.nis);
+      let committed = false;
+      await vref.transaction((v) => {
+        if (v === null) return v;            // voter hilang -> biarkan null (abort)
+        if (v.hasVoted) return;              // return undefined = ABORT transaksi
+        committed = true;
+        return { ...v, hasVoted: true, votedAt: Date.now() };
+      });
+      if (!committed) return { error: 'Kamu sudah memberikan suara sebelumnya' };
+
+      const csnap = await r('candidates/' + candidateId).get();
+      if (!csnap.exists()) {
+        await vref.update({ hasVoted: false, votedAt: null }); // lepas kunci
+        return { error: 'Kandidat tidak valid' };
+      }
+      const ref = r('votes').push();
+      await ref.set({
+        nis: s.nis, name: s.name || '',
+        candidateId,
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+      });
+      return { ok: true };
+    }
+
+    // mode lokal
+    const v = db.voters.find(x => x.id === s.id);
     if (v.hasVoted) return { error: 'Kamu sudah memberikan suara sebelumnya' };
     if (!db.candidates.some(c => c.id === candidateId)) return { error: 'Kandidat tidak valid' };
-    db.votes.push({
-      id: uid(),
-      voterId: v.id,
-      nis: v.nis,
-      name: v.name,
-      candidateId,
-      timestamp: Date.now(),
-    });
-    const voter = db.voters.find(x => x.id === v.id);
-    voter.hasVoted = true;
-    voter.votedAt = Date.now();
-    save();
+    db.votes.push({ id: uid(), voterId: v.id, nis: v.nis, name: v.name, candidateId, timestamp: Date.now() });
+    v.hasVoted = true; v.votedAt = Date.now();
+    saveLocal();
     return { ok: true };
   }
 
-  /* ---------- Hasil ---------- */
-  function getResults() {
-    const votes = [...db.votes].sort((a, b) => a.timestamp - b.timestamp);
-    const perCandidate = db.candidates
-      .slice()
-      .sort((a, b) => a.no - b.no)
-      .map(c => ({
-        ...c,
-        count: votes.filter(v => v.candidateId === c.id).length,
-      }));
+  /* ============================================================
+   * HASIL
+   * ============================================================ */
+  async function getResults() {
+    const [cands, voters, votesSnap] = await Promise.all([
+      getCandidates(), getVoters(),
+      MODE === 'firebase' ? r('votes').get() : Promise.resolve({ val: () => db.votes, exists: () => db.votes.length }),
+    ]);
+    const votesRaw = MODE === 'firebase' ? (votesSnap.exists() ? Object.values(votesSnap.val()) : []) : db.votes;
+    const votes = [...votesRaw].sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+    const perCandidate = cands.map(c => ({ ...c, count: votes.filter(v => v.candidateId === c.id).length }));
     return {
-      votes,
+      votes, perCandidate,
       total: votes.length,
-      totalVoters: db.voters.length,
-      perCandidate,
-      belumVoted: db.voters.filter(v => !v.hasVoted).length,
+      totalVoters: voters.length,
+      belumVoted: voters.filter(v => !v.hasVoted).length,
     };
   }
+
+  /** Live update utk admin: callback dipanggil tiap ada perubahan di DB terpusat. */
+  function onResultsChanged(cb) {
+    if (MODE !== 'firebase') return () => {};
+    const handler = () => { try { cb(); } catch (e) { /* abaikan */ } };
+    const offs = ['votes', 'voters', 'candidates'].map(p => r(p).on('value', handler));
+    return () => offs.forEach(([ref]) => ref.off('value', handler));
+  }
+  const getMode = () => MODE;
 
   return {
     getElection, setElection, openElection, closeElection,
     adminLogin, isAdmin, adminLogout, updateAdmin,
-    getCandidates, addCandidate, updateCandidate, deleteCandidate, deleteAllCandidates, importCandidates,
-    getVoters, findVoter, addVoter, updateVoter, deleteVoter, deleteAllVoters, importVoters, resetAllVotes,
+    getCandidates, addCandidate, deleteCandidate, deleteAllCandidates, importCandidates,
+    getVoters, addVoter, deleteVoter, deleteAllVoters, importVoters, resetAllVotes, factoryReset,
     voterLogin, getVoterSession, voterLogout, castVote,
-    getResults,
+    getResults, onResultsChanged, getMode,
   };
 })();

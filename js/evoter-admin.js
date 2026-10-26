@@ -1,6 +1,6 @@
 /* ============================================================
  * E-Voter — Panel Admin
- * Fitur: hasil, atur pemilihan, CRUD kandidat,
+ * Fitur: hasil (live), atur pemilihan, CRUD kandidat,
  *        import akun pemilih via spreadsheet (xlsx/csv), export.
  * ============================================================ */
 
@@ -19,15 +19,16 @@ function fmtTime(ts) {
 }
 
 /* ================= LOGIN ADMIN ================= */
-$('#adminLoginForm').addEventListener('submit', (e) => {
+$('#adminLoginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  if (!EV.adminLogin($('#adminUser').value.trim(), $('#adminPass').value)) {
+  const ok = await EV.adminLogin($('#adminUser').value.trim(), $('#adminPass').value);
+  if (!ok) {
     const err = $('#adminLoginError');
     err.textContent = 'Username atau password salah';
     show(err);
     return;
   }
-  initPanel();
+  await initPanel();
 });
 
 $('#btnAdminLogout').addEventListener('click', () => {
@@ -46,23 +47,31 @@ $$('.tab').forEach(btn => {
 });
 
 /* ================= INIT ================= */
-function initPanel() {
+async function initPanel() {
   if (!EV.isAdmin()) return;
   $('#adminLogin').classList.add('hidden');
   show($('#adminPanel'));
-  renderAll();
+  const mode = EV.getMode();
+  const tag = $('#modeTag');
+  tag.textContent = mode === 'firebase' ? '🌐 Terpusat (semua perangkat)' : '💾 Lokal (browser ini)';
+  tag.className = 'tag ' + (mode === 'firebase' ? 'open' : '');
+  await renderAll();
+
+  // Live update ketika suara/data berubah di database terpusat
+  EV.onResultsChanged(() => renderResults());
 }
 
-function renderAll() {
-  renderElection();
-  renderCandidateTable();
-  renderVoterTable();
-  renderResults();
+async function renderAll() {
+  if (!EV.isAdmin()) return;
+  await renderElection();
+  await renderResults();
+  await renderCandidateTable();
+  await renderVoterTable();
 }
 
 /* ================= TAB PEMILIHAN ================= */
-function renderElection() {
-  const el = EV.getElection();
+async function renderElection() {
+  const el = await EV.getElection();
   $('#elTitle').value = el.title;
   $('#elDesc').value = el.desc;
   const btn = $('#btnToggleOpen');
@@ -75,25 +84,25 @@ function renderElection() {
   }
 }
 
-$('#electionForm').addEventListener('submit', (e) => {
+$('#electionForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  EV.setElection({ title: $('#elTitle').value.trim() || 'Pemilihan', desc: $('#elDesc').value.trim() });
+  await EV.setElection({ title: $('#elTitle').value.trim() || 'Pemilihan', desc: $('#elDesc').value.trim() });
   alert('Tersimpan ✔');
 });
 
-$('#btnToggleOpen').addEventListener('click', () => {
-  const el = EV.getElection();
+$('#btnToggleOpen').addEventListener('click', async () => {
+  const el = await EV.getElection();
   if (el.status === 'open') {
-    if (confirm('Tutup pemilihan? Pemilih tidak bisa vote lagi.')) EV.closeElection();
+    if (confirm('Tutup pemilihan? Pemilih tidak bisa vote lagi.')) await EV.closeElection();
   } else {
-    if (confirm('Buka pemilihan sekarang?')) EV.openElection();
+    if (confirm('Buka pemilihan sekarang?')) await EV.openElection();
   }
-  renderElection();
+  await renderElection();
 });
 
 /* ================= TAB KANDIDAT ================= */
-function renderCandidateTable() {
-  const list = EV.getCandidates();
+async function renderCandidateTable() {
+  const [list, results] = await Promise.all([EV.getCandidates(), EV.getResults()]);
   const t = $('#candidatesTable');
   t.innerHTML = `
     <thead><tr><th>No</th><th>Nama</th><th>Kelas</th><th>Visi</th><th>Suara</th><th></th></tr></thead>
@@ -109,20 +118,20 @@ function renderCandidateTable() {
           </div></td>
           <td>${escapeHtml(c.kelas)}</td>
           <td class="muted small">${escapeHtml(c.visi)}</td>
-          <td>${EV.getResults().votes.filter(v => v.candidateId === c.id).length}</td>
+          <td>${(results.perCandidate.find(p => p.id === c.id) || { count: 0 }).count}</td>
           <td><button class="btn danger subtle" data-del="${c.id}">Hapus</button></td>
         </tr>
       `).join('')}
     </tbody>
   `;
-  t.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
-    if (confirm('Hapus kandidat ini?')) { EV.deleteCandidate(b.dataset.del); renderAll(); }
+  t.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', async () => {
+    if (confirm('Hapus kandidat ini?')) { await EV.deleteCandidate(b.dataset.del); await renderAll(); }
   }));
 }
 
-$('#candidateForm').addEventListener('submit', (e) => {
+$('#candidateForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  EV.addCandidate({
+  await EV.addCandidate({
     no: $('#candNo').value,
     name: $('#candName').value,
     kelas: $('#candKelas').value,
@@ -131,20 +140,20 @@ $('#candidateForm').addEventListener('submit', (e) => {
     misi: $('#candMisi').value,
   });
   $('#candidateForm').reset();
-  renderAll();
+  await renderAll();
 });
 
-$('#btnDeleteAllCandidates').addEventListener('click', () => {
-  if (confirm('Hapus SEMUA kandidat?')) { EV.deleteAllCandidates(); renderAll(); }
+$('#btnDeleteAllCandidates').addEventListener('click', async () => {
+  if (confirm('Hapus SEMUA kandidat?')) { await EV.deleteAllCandidates(); await renderAll(); }
 });
 
 /* ================= TAB PEMILIH ================= */
 const VOTER_PAGE = 15;
 let voterOffset = 0;
 
-function renderVoterTable() {
+async function renderVoterTable() {
   const q = $('#voterSearch').value.trim().toLowerCase();
-  let list = EV.getVoters();
+  let list = await EV.getVoters();
   $('#voterCount').textContent = list.length + ' orang';
   if (q) list = list.filter(v => v.nis.toLowerCase().includes(q) || (v.name || '').toLowerCase().includes(q));
 
@@ -166,6 +175,9 @@ function renderVoterTable() {
       `).join('')}
     </tbody>
   `;
+  t.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', async () => {
+    if (confirm('Hapus akun pemilih ini?')) { await EV.deleteVoter(b.dataset.del); await renderAll(); }
+  }));
 
   // navigasi halaman (dibangun ulang setiap render, tidak menggandakan)
   let nav = $('#voterNav');
@@ -186,27 +198,27 @@ function renderVoterTable() {
 
 $('#voterSearch').addEventListener('input', () => { voterOffset = 0; renderVoterTable(); });
 
-$('#voterForm').addEventListener('submit', (e) => {
+$('#voterForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const res = EV.addVoter({ nis: $('#voteNis').value, name: $('#voteName').value, pin: $('#votePin').value });
+  const res = await EV.addVoter({ nis: $('#voteNis').value, name: $('#voteName').value, pin: $('#votePin').value });
   if (res.error) { alert(res.error); return; }
   $('#voterForm').reset();
-  renderVoterTable();
+  await renderVoterTable();
 });
 
-$('#btnDeleteAllVoters').addEventListener('click', () => {
+$('#btnDeleteAllVoters').addEventListener('click', async () => {
   if (confirm('Hapus SEMUA akun pemilih? Hasil vote juga ikut reset.')) {
-    EV.deleteAllVoters(); EV.resetAllVotes(); renderAll();
+    await EV.deleteAllVoters();
+    await EV.resetAllVotes();
+    await renderAll();
   }
 });
 
 /* ============================================================
- * ⭐ IMPORT SPREADSHEET (Excel/CSV) — fitur utama
+ * ⭐ IMPORT SPREADSHEET (Excel/CSV)
  * ============================================================ */
 let importRows = [];
 
-/** Normalisasi nama kolom -> field standar. Kenali variasi huruf besar-kecil
- *  dan judul berbeda ("No Induk", "Nama Siswa", "Kata Sandi", dst). */
 function normalizeHeader(h) {
   const s = String(h).toLowerCase().replace(/[\s_.-]/g, '');
   if (/^(nis|nim|nourut|noinduk|induk|id|nisn)$/.test(s)) return 'nis';
@@ -225,12 +237,11 @@ function parseFile(file) {
       const raw = XLSX.utils.sheet_to_json(sheet, { defval: '' });
       if (raw.length === 0) { alert('File kosong / tidak ada data baris.'); return; }
 
-      // Deteksi nama kolom dari baris pertama
       const firstRow = raw[0];
       const colMap = {};
       Object.keys(firstRow).forEach(k => {
         const f = normalizeHeader(k);
-        if (f && !colMap[f]) colMap[f] = k; // pakai yang pertama saja
+        if (f && !colMap[f]) colMap[f] = k;
       });
 
       if (!colMap.nis) {
@@ -238,7 +249,6 @@ function parseFile(file) {
         return;
       }
 
-      // Kalau baris pertama justru data (tidak ada header) & kolom bernama generik
       const generic = Object.keys(firstRow).every(k => /^__EMPTY/.test(k) || k === '\ufeff');
       let rowsOut, headerNote;
       if (generic) {
@@ -259,7 +269,7 @@ function parseFile(file) {
           (colMap.pin ? `, PIN=${colMap.pin} (otomatis jika tidak ada)` : ', PIN=(auto)');
       }
 
-      importRows = rowsOut.filter(r => r.nis); // skip baris tanpa NIS
+      importRows = rowsOut.filter(r => r.nis);
       const skipped = rowsOut.length - importRows.length;
 
       renderImportPreview(headerNote, skipped);
@@ -281,7 +291,7 @@ function renderImportPreview(headerNote, skipped) {
   $('#importTable').innerHTML = `
     <thead><tr><th>#</th><th>NIS</th><th>Nama</th><th>PIN</th></tr></thead>
     <tbody>
-      ${importRows.map((r, i) => `
+      ${importRows.map(r => `
         <tr>
           <td>${r.__line}</td>
           <td><b>${escapeHtml(r.nis)}</b></td>
@@ -296,7 +306,7 @@ function renderImportPreview(headerNote, skipped) {
 
 $('#fileImport').addEventListener('change', (e) => {
   if (e.target.files[0]) parseFile(e.target.files[0]);
-  e.target.value = ''; // allow re-upload same file
+  e.target.value = '';
 });
 
 $('#btnImportCancel').addEventListener('click', () => {
@@ -304,17 +314,22 @@ $('#btnImportCancel').addEventListener('click', () => {
   hide($('#importPreview'));
 });
 
-$('#btnImportCommit').addEventListener('click', () => {
+$('#btnImportCommit').addEventListener('click', async () => {
   if (importRows.length === 0) return;
-  const res = EV.importVoters(importRows);
+  const btn = $('#btnImportCommit');
+  btn.disabled = true;
+  btn.textContent = 'Mengimpor...';
+  const res = await EV.importVoters(importRows);
   importRows = [];
+  btn.disabled = false;
+  btn.textContent = '✔️ Import Sekarang';
   hide($('#importPreview'));
   const out = $('#importResult');
-  out.textContent = `✅ ${res.ok} akun berhasil diimport.` + (res.errors.length ? ` ${res.errors.length} baris di-skip (NIS duplikat/kosong).` : '');
+  out.textContent = `✅ ${res.ok} akun berhasil diimport (terkirim ke database terpusat).` +
+    (res.errors.length ? ` ${res.errors.length} baris di-skip (NIS duplikat/kosong).` : '');
   out.className = 'success';
   show(out);
-  setTimeout(() => hide(out), 6000);
-  renderAll();
+  await renderAll();
 });
 
 $('#btnDownloadTemplate').addEventListener('click', downloadTemplate);
@@ -345,15 +360,15 @@ function downloadCSV(rows, filename) {
   URL.revokeObjectURL(a.href);
 }
 
-$('#btnExportAccounts').addEventListener('click', () => {
+$('#btnExportAccounts').addEventListener('click', async () => {
   const rows = [['NIS', 'Nama', 'PIN', 'SudahVote']].concat(
-    EV.getVoters().map(v => [v.nis, v.name, v.pin, v.hasVoted ? 'ya' : 'belum'])
+    (await EV.getVoters()).map(v => [v.nis, v.name, v.pin, v.hasVoted ? 'ya' : 'belum'])
   );
   downloadCSV(rows, 'akun_pemilih.csv');
 });
 
-$('#btnExportVotes').addEventListener('click', () => {
-  const r = EV.getResults();
+$('#btnExportVotes').addEventListener('click', async () => {
+  const r = await EV.getResults();
   const candName = id => r.perCandidate.find(c => c.id === id)?.name || '(invalid)';
   const rows = [['Waktu', 'NIS', 'Nama', 'Memilih']].concat(
     r.votes.map(v => [fmtTime(v.timestamp), v.nis, v.name, candName(v.candidateId)])
@@ -361,18 +376,19 @@ $('#btnExportVotes').addEventListener('click', () => {
   downloadCSV(rows, 'riwayat_suara.csv');
 });
 
-$('#btnExportCandidates').addEventListener('click', () => {
+$('#btnExportCandidates').addEventListener('click', async () => {
+  const r = await EV.getResults();
   const rows = [['No', 'Nama', 'Kelas', 'Suara']].concat(
-    EV.getResults().perCandidate.map(c => [c.no, c.name, c.kelas, c.count])
+    r.perCandidate.map(c => [c.no, c.name, c.kelas, c.count])
   );
   downloadCSV(rows, 'hasil_per_kandidat.csv');
 });
 
 /* ================= DASHBOARD / HASIL ================= */
-function renderResults() {
-  const r = EV.getResults();
+async function renderResults() {
+  if (!EV.isAdmin()) return;
+  const r = await EV.getResults();
 
-  // stat cards
   $('#statRow').innerHTML = `
     <div class="stat"><b>${r.total}</b><span>Total Suara</span></div>
     <div class="stat"><b>${r.totalVoters}</b><span>Total Pemilih</span></div>
@@ -380,7 +396,6 @@ function renderResults() {
     <div class="stat"><b>${r.totalVoters ? Math.round(r.total / r.totalVoters * 100) : 0}%</b><span>Partisipasi</span></div>
   `;
 
-  // bar chart sederhana (max di-highlight)
   const max = Math.max(1, ...r.perCandidate.map(c => c.count));
   $('#chart').innerHTML = r.perCandidate.length === 0
     ? '<p class="muted center">Belum ada kandidat.</p>'
@@ -394,7 +409,6 @@ function renderResults() {
       </div>
     `).join('');
 
-  // riwayat (10 terakhir)
   const recent = r.votes.slice(-10).reverse();
   $('#votesTable').innerHTML = `
     <thead><tr><th>Waktu</th><th>NIS</th><th>Nama</th><th>Memilih Kandidat</th></tr></thead>
@@ -408,34 +422,26 @@ function renderResults() {
   `;
 }
 
-$('#btnResetVotes').addEventListener('click', () => {
+$('#btnResetVotes').addEventListener('click', async () => {
   if (confirm('Reset SEMUA suara (semua pemilih jadi belum vote)?')) {
-    EV.resetAllVotes();
-    renderAll();
+    await EV.resetAllVotes();
+    await renderAll();
   }
 });
 
 /* ================= PENGATURAN ================= */
-$('#adminAccountForm').addEventListener('submit', (e) => {
+$('#adminAccountForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const user = $('#setAdminUser').value.trim() || 'admin';
   const pass = $('#setAdminPass').value;
-  EV.updateAdmin(user, pass || currentPass());
+  await EV.updateAdmin(user, pass);
   alert('Akun admin diperbarui ✔');
   $('#setAdminPass').value = '';
 });
 
-function currentPass() {
-  try {
-    const raw = localStorage.getItem('evoter_db_v1');
-    return raw ? JSON.parse(raw).admin.password : 'admin123';
-  } catch { return 'admin123'; }
-}
-
-$('#btnFactoryReset').addEventListener('click', () => {
+$('#btnFactoryReset').addEventListener('click', async () => {
   if (confirm('RESET TOTAL: semua data (kandidat, pemilih, suara) akan dihapus permanen. Lanjut?')) {
-    localStorage.removeItem('evoter_db_v1');
-    sessionStorage.clear();
+    await EV.factoryReset();
     location.reload();
   }
 });

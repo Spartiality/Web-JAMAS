@@ -9,14 +9,17 @@ const hide = (el) => el.classList.add('hidden');
 let selectedCandidateId = null;
 
 function fmtTime(ts) {
-  return new Date(ts).toLocaleString('id-ID', {
-    dateStyle: 'medium', timeStyle: 'short',
-  });
+  return new Date(ts).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+}
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = String(s ?? '');
+  return d.innerHTML;
 }
 
 /* ---------- Inisialisasi ---------- */
-function init() {
-  const el = EV.getElection();
+async function init() {
+  const el = await EV.getElection();
   $('#electionTitle').textContent = el.title;
   $('#electionDesc').textContent = el.desc;
 
@@ -25,21 +28,17 @@ function init() {
   b.className = 'badge ' + (el.status === 'open' ? 'open' : 'closed');
 
   const voter = EV.getVoterSession();
-  if (voter) {
-    hide($('#loginCard'));
-    showVoteBoard(voter);
-  } else {
-    show($('#loginCard'));
-  }
+  if (voter) showVoteBoard(voter, el);
+  else show($('#loginCard'));
 }
 
-function showVoteBoard(voter) {
+async function showVoteBoard(voter, elArg) {
   hide($('#loginCard'));
   show($('#voteCard'));
   $('#voterName').textContent = voter.name || voter.nis;
   $('#voterNis').textContent = voter.nis;
 
-  const el = EV.getElection();
+  const el = elArg || await EV.getElection();
 
   if (voter.hasVoted) {
     show($('#alreadyVoted'));
@@ -51,13 +50,13 @@ function showVoteBoard(voter) {
     return;
   }
   show($('#votingArea'));
-  renderCandidates();
+  await renderCandidates();
 }
 
 /* ---------- Login ---------- */
-$('#loginForm').addEventListener('submit', (e) => {
+$('#loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const res = EV.voterLogin($('#loginNis').value.trim(), $('#loginPin').value);
+  const res = await EV.voterLogin($('#loginNis').value.trim(), $('#loginPin').value);
   if (res.error) {
     const err = $('#loginError');
     err.textContent = res.error;
@@ -66,7 +65,7 @@ $('#loginForm').addEventListener('submit', (e) => {
   }
   $('#loginForm').reset();
   hide($('#loginError'));
-  showVoteBoard(res.voter);
+  await showVoteBoard(res.voter);
 });
 
 $('#btnLogout').addEventListener('click', () => {
@@ -75,8 +74,8 @@ $('#btnLogout').addEventListener('click', () => {
 });
 
 /* ---------- Kartu Kandidat ---------- */
-function renderCandidates() {
-  const list = EV.getCandidates();
+async function renderCandidates() {
+  const list = await EV.getCandidates();
   const grid = $('#candidateGrid');
   grid.innerHTML = '';
 
@@ -109,15 +108,9 @@ function renderCandidates() {
   });
 }
 
-function escapeHtml(s) {
-  const d = document.createElement('div');
-  d.textContent = String(s ?? '');
-  return d.innerHTML;
-}
-
 /* ---------- Modal Konfirmasi ---------- */
-function openConfirm(id) {
-  const c = EV.getCandidates().find(x => x.id === id);
+async function openConfirm(id) {
+  const c = (await EV.getCandidates()).find(x => x.id === id);
   if (!c) return;
   selectedCandidateId = id;
   $('#confirmCandidate').innerHTML = `
@@ -138,9 +131,14 @@ $('#btnCancelVote').addEventListener('click', () => {
   hide($('#confirmModal'));
 });
 
-$('#btnConfirmVote').addEventListener('click', () => {
+$('#btnConfirmVote').addEventListener('click', async () => {
   if (!selectedCandidateId) return;
-  const res = EV.castVote(selectedCandidateId);
+  const btn = $('#btnConfirmVote');
+  btn.disabled = true;
+  btn.textContent = 'Merekam suara...';
+  const res = await EV.castVote(selectedCandidateId);
+  btn.disabled = false;
+  btn.textContent = 'Ya, Pilih Ini';
   hide($('#confirmModal'));
   if (res.error) {
     alert(res.error);
