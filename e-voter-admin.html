@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Voter — Panel Admin</title>
+  <link rel="stylesheet" href="css/evoter.css">
+  <link rel="icon" href="images/opt/logo.png" type="image/png">
+  <!-- SheetJS: baca file Excel .xlsx / .csv di browser -->
+  <link rel="icon" href="images/opt/logo.png" type="image/png">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital@1&family=Manrope:wght@500;700;800&display=swap">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img class="brand__logo" src="images/opt/logo.png" alt="Logo JAMAS">
+      <span class="brand__text"><strong>E-Voter</strong><small>JAMAS Matsanewa</small></span>
+      <span class="tag">Admin</span>
+    </div>
+    <nav>
+      <a href="index.html">← Situs JAMAS</a>
+    <a href="vote.html">Halaman Vote</a>
+      <a href="#" id="btnAdminLogout">Keluar</a>
+    </nav>
+  </header>
+
+  <!-- ================= LOGIN ADMIN ================= -->
+  <main class="container" id="adminLogin">
+    <section class="card center narrow">
+      <h2>Login Admin</h2>
+      <p class="muted">Default: <code>admin</code> / <code>admin123</code> (ubah di tab Pengaturan)</p>
+      <form id="adminLoginForm" class="form">
+        <input id="adminUser" type="text" placeholder="Username" autocomplete="off" required>
+        <input id="adminPass" type="password" placeholder="Password" required>
+        <button class="btn primary">Masuk</button>
+        <p id="adminLoginError" class="error hidden"></p>
+      </form>
+    </section>
+  </main>
+
+  <!-- ================= DASHBOARD ================= -->
+  <main class="container hidden" id="adminPanel">
+    <div class="tabs">
+      <button class="tab active" data-tab="dashboard">📊 Hasil</button>
+      <button class="tab" data-tab="election">⚙️ Pemilihan</button>
+      <button class="tab" data-tab="candidates">👤 Kandidat</button>
+      <button class="tab" data-tab="voters">👥 Pemilih</button>
+      <button class="tab" data-tab="settings">🔒 Pengaturan</button>
+    </div>
+
+    <!-- ===== TAB: DASHBOARD / HASIL ===== -->
+    <section id="tab-dashboard" class="tab-pane">
+      <div class="stat-row" id="statRow"></div>
+      <div class="card">
+        <h2>Hasil Perolehan Suara</h2>
+        <div id="chart" class="bar-chart"></div>
+      </div>
+      <div class="card">
+        <div class="row between wrap">
+          <h2>Riwayat Suara Masuk</h2>
+          <div class="row gap wrap">
+            <button id="btnExportVotes" class="btn subtle">⬇️ Export CSV</button>
+            <button id="btnResetVotes" class="btn danger">🔄 Reset Suara</button>
+          </div>
+        </div>
+        <div class="table-wrap"><table id="votesTable"></table></div>
+      </div>
+    </section>
+
+    <!-- ===== TAB: PEMILIHAN ===== -->
+    <section id="tab-election" class="tab-pane hidden">
+      <div class="card">
+        <h2>Atur Pemilihan</h2>
+        <form id="electionForm" class="form">
+          <label>Judul</label>
+          <input id="elTitle" type="text" required>
+          <label>Deskripsi</label>
+          <textarea id="elDesc" rows="3"></textarea>
+          <div class="row gap">
+            <button type="submit" class="btn primary">💾 Simpan</button>
+            <button type="button" id="btnToggleOpen" class="btn"></button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== TAB: KANDIDAT ===== -->
+    <section id="tab-candidates" class="tab-pane hidden">
+      <div class="card">
+        <div class="row between wrap">
+          <h2>Daftar Kandidat</h2>
+          <div class="row gap wrap">
+            <button id="btnExportCandidates" class="btn subtle">⬇️ Export CSV</button>
+            <button id="btnDeleteAllCandidates" class="btn danger danger-soft">🗑️ Hapus Semua</button>
+          </div>
+        </div>
+        <div class="table-wrap"><table id="candidatesTable"></table></div>
+      </div>
+      <div class="card">
+        <h2>Tambah Kandidat</h2>
+        <p class="muted">Nomor urut dikosongkan = otomatis. Tambahkan kandidat sebanyak yang dibutuhkan, satu per satu.</p>
+        <form id="candidateForm" class="form grid2">
+          <div><label>Nomor Urut</label><input id="candNo" type="number" min="1" placeholder="otomatis"></div>
+          <div><label>Nama</label><input id="candName" type="text" required></div>
+          <div><label>Kelas</label><input id="candKelas" type="text" placeholder="cth: XI RPL 1"></div>
+          <div><label>Foto (URL)</label><input id="candPhoto" type="url" placeholder="https://..."></div>
+          <div class="span2"><label>Visi</label><input id="candVisi" type="text"></div>
+          <div class="span2"><label>Misi</label><textarea id="candMisi" rows="2"></textarea></div>
+          <div class="span2 row gap">
+            <button class="btn primary">➕ Tambah Kandidat</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== TAB: PEMILIH ===== -->
+    <section id="tab-voters" class="tab-pane hidden">
+      <!-- IMPORT SPREADSHEET -->
+      <div class="card">
+        <h2>📥 Import Pemilih dari Spreadsheet</h2>
+        <p class="muted">
+          Upload file <b>Excel (.xlsx/.xls)</b> atau <b>CSV</b> berisi daftar akun pemilih.
+          Kolom yang dikenali di baris pertama (header):
+          <code>NIS</code>, <code>Nama</code>, <code>PIN</code> — kolom apa pun urutan/judulnya asal mengandung
+          kata ini (mis. "No Induk", "Nama Siswa", juga terbaca).
+        </p>
+        <div class="import-row">
+          <label class="btn secondary file-btn">
+            📊 Pilih File
+            <input id="fileImport" type="file" accept=".xlsx,.xls,.csv" hidden>
+          </label>
+          <button id="btnDownloadTemplate" class="btn subtle">📄 Download Template CSV</button>
+        </div>
+        <!-- preview sebelum commit -->
+        <div id="importPreview" class="hidden">
+          <div class="row between wrap">
+            <h3>Preview Import</h3>
+            <div class="row gap">
+              <b id="importStat"></b>
+              <button id="btnImportCancel" class="btn subtle">Batal</button>
+            </div>
+          </div>
+          <div class="table-wrap limit"><table id="importTable"></table></div>
+          <div class="row gap">
+            <button id="btnImportCommit" class="btn primary">✔️ Import Sekarang</button>
+          </div>
+          <p id="importErrors" class="error"></p>
+        </div>
+        <p id="importResult" class="success hidden"></p>
+      </div>
+
+      <div class="card">
+        <div class="row between wrap">
+          <h2>Daftar Pemilih <span class="tag" id="voterCount"></span></h2>
+          <div class="row gap wrap">
+            <button id="btnExportAccounts" class="btn subtle">⬇️ Export Akun CSV</button>
+            <button id="btnDeleteAllVoters" class="btn danger danger-soft">🗑️ Hapus Semua</button>
+          </div>
+        </div>
+        <div class="row gap wrap">
+          <input id="voterSearch" type="search" placeholder="Cari NIS / nama..." class="inline-input">
+        </div>
+        <div class="table-wrap limit"><table id="votersTable"></table></div>
+      </div>
+
+      <div class="card">
+        <h2>Tambah Pemilih Manual</h2>
+        <form id="voterForm" class="form grid2">
+          <div><label>NIS / NIM</label><input id="voteNis" type="text" required></div>
+          <div><label>Nama</label><input id="voteName" type="text" required></div>
+          <div><label>PIN (kosong = otomatis)</label><input id="votePin" type="text" inputmode="numeric" maxlength="6"></div>
+          <div class="flex-end"><button class="btn primary">➕ Tambah</button></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== TAB: PENGATURAN ===== -->
+    <section id="tab-settings" class="tab-pane hidden">
+      <div class="card">
+        <h2>Ubah Akun Admin</h2>
+        <form id="adminAccountForm" class="form grid2">
+          <div><label>Username</label><input id="setAdminUser" type="text" required></div>
+          <div><label>Password baru</label><input id="setAdminPass" type="password" placeholder="(isi untuk ganti)"></div>
+          <div class="span2"><button class="btn primary">💾 Simpan</button></div>
+        </form>
+        <p class="muted small">Data tersimpan di browser ini (localStorage). Cadangkan hasil dengan Export CSV. Reset total di bawah:</p>
+        <button id="btnFactoryReset" class="btn danger">⚠️ Reset Total (hapus semua data)</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/evoter-store.js"></script>
+  <script src="js/evoter-admin.js"></script>
+</body>
+</html>

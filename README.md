@@ -7,7 +7,8 @@ Editorial, motion-driven website for **JAMAS Matsanewa**, the student religious 
 - `index.html` — the main one-page experience: Home, Tentang, Anggota, Program Kami, and Galeri.
 - `program-kami.html` — standalone Form Pengaduan page and no-JS fallback for the in-page form dialog.
 - `about.html` — small redirect to `index.html#tentang`.
-- `vote.html` — preserved election page with its existing Google Apps Script integration.
+- `vote.html` — **E-Voter**: halaman pemilihan (login NIS/NIM + PIN, 1 pemilih 1 suara, data tersimpan di localStorage browser). Styling mengikuti identitas situs (forest/ivory/gold).
+- `e-voter-admin.html` — Panel Admin E-Voter: kelola pemilihan, kandidat (input manual tanpa batas), import akun pemilih via spreadsheet `.xlsx`/`.csv`, hasil & export CSV. Login awal `admin` / `admin123`.
 
 ## Stack
 

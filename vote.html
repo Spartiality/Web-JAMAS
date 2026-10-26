@@ -1,522 +1,109 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="id">
 <head>
-  <!-- Basic -->
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <!-- Mobile Metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <!-- Site Metas -->
-  <link rel="icon" href="images/JAMAS.png" type="image/gif" />
-  <meta name="keywords" content="" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
-
-  <title>JAMAS Matsanewa</title>
-
-  <!-- bootstrap core css -->
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-
-  <!-- fonts style -->
-  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet" />
-
-  <!-- font awesome style -->
-  <link href="css/font-awesome.min.css" rel="stylesheet" />
-  <!-- Custom styles for this template -->
-  <link href="css/style.css" rel="stylesheet" />
-  <!-- responsive style -->
-  <link href="css/responsive.css" rel="stylesheet" />
-
-  <style>
-    /* Small page-scoped overrides to preserve original layout without changing repo-wide design */
-    .evote-hero {
-      min-height: 70vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: url("bg.jpg") no-repeat center center;
-      background-size: cover;
-      margin: 32px 0;
-    }
-
-    .evote-card {
-      background-color: rgba(44, 92, 53, 0.95);
-      border-radius: 15px;
-      width: 90%;
-      max-width: 520px;
-      padding: 40px 24px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
-      color: #fff;
-      text-align: center;
-    }
-
-    .evote-card h2 {
-      font-size: 1.6rem;
-      margin-bottom: 0.25rem;
-      color: #fff;
-    }
-
-    .evote-card p.lead {
-      margin-bottom: 1rem;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .evote-input {
-      display: block;
-      width: 100%;
-      max-width: 320px;
-      padding: 12px 16px;
-      margin: 10px auto;
-      border: 1px solid #ccc;
-      border-radius: 25px;
-    }
-
-    .oval-button {
-      display: inline-block;
-      padding: 10px 26px;
-      font-weight: 600;
-      color: #fff;
-      background-color: #b89f50;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .oval-button:hover {
-      background-color: #94803d;
-    }
-
-    .candidate-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-      justify-items: center;
-      margin-top: 18px;
-    }
-
-    .candidate-card {
-      width: 220px;
-      padding: 12px;
-      color: #000;
-      background: #fff;
-      border-radius: 14px;
-      text-align: center;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.18);
-    }
-
-    .candidate-card img {
-      width: 100%;
-      border-radius: 10px;
-    }
-
-    .error {
-      margin-top: 8px;
-      color: #ff6b6b;
-    }
-
-    .thanks-box {
-      width: 90%;
-      max-width: 520px;
-      margin: 40px auto;
-      padding: 36px 22px;
-      color: #fff;
-      background-color: rgba(44, 92, 53, 0.95);
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
-    }
-
-    /* Responsive tweaks */
-    @media (max-width: 576px) {
-      .candidate-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .evote-card {
-        padding: 28px 16px;
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Voter — Voting Pemilihan</title>
+  <link rel="stylesheet" href="css/evoter.css">
+  <link rel="icon" href="images/opt/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital@1&family=Manrope:wght@500;700;800&display=swap">
 </head>
-
-<body class="sub_page">
-
-  <div class="hero_area">
-    <!-- header section strats -->
-    <header class="header_section long_section px-0">
-      <nav class="navbar navbar-expand-lg custom_nav-container ">
-        <a class="navbar-brand" href="index.html">
-          <span>
-            JAMAS Matsanewa
-          </span>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle naviga[...]">
-          <span class=""> </span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
-            <ul class="navbar-nav  ">
-              <li class="nav-item active">
-                <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="about.html"> About</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="programDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Program Kami
-                </a>
-                <div class="dropdown-menu" aria-labelledby="programDropdown">
-                  <a class="dropdown-item" href="form.html">Form Pengaduan</a>
-                  <a class="dropdown-item" href="https://youtu.be/xvFZjo5PgG0">Bakti Sosial</a>
-                  <a class="dropdown-item" href="https://youtu.be/xvFZjo5PgG0">Bakti Pendidikan</a>
-                  <a class="dropdown-item" href="https://youtu.be/xvFZjo5PgG0">Bakti Agama</a>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </header>
-    <!-- end header section -->
-  </div>
-
-  <!-- begin voting main-section -->
-  <div class="evote-hero">
-    <div class="evote-card" role="main" aria-labelledby="evote-title">
-      <header class="mb-3 d-flex align-items-center justify-content-center">
-        <img src="images/JAMAS.png" alt="JAMAS MATSANEWA logo" style="width: 55px; height: 55px; margin-right: 12px;">
-        <h1 id="evote-title" style="font-size: 1.5rem; margin: 0; color: #fff;">JAMAS MATSANEWA</h1>
-      </header>
-
-      <!-- begin login section -->
-      <!-- Page 1: LOGIN -->
-      <section id="page-login" class="evote-page">
-        <h2>Voter Login</h2>
-        <p class="lead">Enter your name to start voting</p>
-
-        <label for="nama" class="sr-only">Enter name</label>
-        <input type="text" id="nama" class="evote-input" placeholder="Enter your name..." aria-describedby="error-msg" aria-required="true">
-
-        <div class="mt-4">
-          <button type="button" class="oval-button" id="login-btn">Login</button>
-        </div>
-
-        <p class="error" id="error-msg" role="alert" aria-live="assertive"></p>
-      </section>
-      <!-- end login section -->
-  
-      <!-- begin voting section -->
-      <!-- Page 2: VOTING -->
-      <section id="page-vote" class="evote-page" style="display: none; margin-top: 8px;">
-        <h2>Choose the Candidate</h2>
-
-        <div class="candidate-grid mt-3">
-          <div class="candidate-card">
-            <img src="images/CaKetua2026_Naila.jpg" alt="Candidate 1 photo">
-            <h3 class="mt-4">Naila Afiqa P</h3>
-            <button type="button" class="oval-button candidate-btn mt-3" data-name="Naila Afiqa Putri">Select</button>
-          </div>
-
-          <div class="candidate-card">
-            <img src="images/CaKetua2026_Naira.jpg" alt="Candidate 2 photo">
-            <h3 class="mt-4">Naira Ezza F.</h3>
-            <button type="button" class="oval-button candidate-btn mt-3" data-name="Naira Ezza Farhana">Select</button>
-          </div>
-
-          <div class="candidate-card">
-            <img src="images/CaKetua2026_Kartika.jpg" alt="Candidate 3 photo">
-            <h3 class="mt-4">Kartika Putri T.</h3>
-            <button type="button" class="oval-button candidate-btn mt-3" data-name="Kartika Putri Tunggadewi">Select</button>
-          </div>
-
-          <div class="candidate-card">
-            <img src="images/CaKetua2026_Jauza.jpg" alt="Candidate 4 photo">
-            <h3 class="mt-4">Jauza Absal D.</h3>
-            <button type="button" class="oval-button candidate-btn mt-3" data-name="Jauza Absal Dzakiy">Select</button>
-          </div>
-        </div>
-      </section>
-      <!-- end voting section -->
-
-      <!-- begin thanks section -->
-      <!-- Page 3: THANK YOU -->
-      <section id="page-thanks" class="thanks-box" style="display: none;">
-        <h2>Thank you for participating!</h2>
-        <p>Your vote has been recorded.</p>
-        <div class="mt-3">
-          <button type="button" class="oval-button" id="kembali-btn">Back to Login</button>
-        </div>
-      </section>
-      <!-- end thanks section -->
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img class="brand__logo" src="images/opt/logo.png" alt="Logo JAMAS">
+      <span class="brand__text"><strong>E-Voter</strong><small>JAMAS Matsanewa</small></span>
     </div>
-    <!-- end voting main-section -->
-  </div>
+    <nav>
+      <a href="index.html" class="active">← Situs JAMAS</a>
+    <a href="e-voter-admin.html">Panel Admin</a>
+    </nav>
+  </header>
 
-  <!-- jQery -->
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <!-- bootstrap js -->
-  <script src="js/bootstrap.js"></script>
-  <!-- custom js from repo -->
-  <script src="js/custom.js"></script>
+  <main class="container">
 
-  <!-- begin vote-script section -->
-  <script>
-    (function () {
-      // Backend endpoint placeholder (Google Apps Script Web App URL)
-      // Replace this with your deployed Web App URL, e.g.:
-      // const API_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
-      const API_URL = "https://script.google.com/macros/s/AKfycbxvDJ4Vfg9oqtNS3zmADcPB2g8b5PN71K4iq2ijQ7xDjOIyQDj4zRgAGCGjoIWoZ6R4QQ/exec";
+    <!-- ================= HALAMAN AWAL / HEADER ================= -->
+    <section id="home">
+      <div class="hero">
+        <h1 id="electionTitle">Pemilihan</h1>
+        <p id="electionDesc" class="muted"></p>
+        <div id="electionStatus" class="badge"></div>
+      </div>
+    </section>
 
-      // State
-      let daftarNama = []; // raw names from the sheet
-      let nameMap = new Map(); // normalizedName -> canonical sheet name
-      let allowedNamesNormalized = new Set(); // for O(1) checks
-      let alreadyVotedNormalized = new Set(); // names who already voted
-      let configLoaded = false;
+    <!-- ================= LOGIN ================= -->
+    <section id="loginCard" class="card center">
+      <h2>Masuk untuk Memilih</h2>
+      <p class="muted">Gunakan NIS dan PIN yang diberikan panitia.</p>
+      <form id="loginForm" class="form">
+        <input id="loginNis" type="text" autocomplete="off" placeholder="NIS / NIM" required>
+        <input id="loginPin" type="password" inputmode="numeric" maxlength="6" placeholder="PIN" required>
+        <button type="submit" class="btn primary">Masuk</button>
+        <p id="loginError" class="error hidden"></p>
+      </form>
+    </section>
 
-      // Elements
-      const pageLogin = document.getElementById("page-login");
-      const pageVote = document.getElementById("page-vote");
-      const pageThanks = document.getElementById("page-thanks");
-      const errorMsg = document.getElementById("error-msg");
-      const loginBtn = document.getElementById("login-btn");
-      const kembaliBtn = document.getElementById("kembali-btn");
-      const candidateBtns = document.querySelectorAll(".candidate-btn");
-      const loadingMsg = document.getElementById("loading-msg");
+    <!-- ================= PAPAN VOTING ================= -->
+    <section id="voteCard" class="hidden">
+      <div class="voter-info card">
+        <div>
+          <span class="muted">Halo,</span>
+          <b id="voterName"></b>
+          <span class="muted"> (NIS <span id="voterNis"></span>)</span>
+        </div>
+        <button id="btnLogout" class="btn subtle">Keluar</button>
+      </div>
 
-      let submitting = false;
+      <!-- sudah vote -->
+      <div id="alreadyVoted" class="card center hidden">
+        <div class="big-icon">✅</div>
+        <h2>Suaramu sudah tercatat!</h2>
+        <p class="muted">Terima kasih sudah berpartisipasi. Setiap pemilih hanya bisa memilih satu kali.</p>
+        <p class="muted small" id="votedAtText"></p>
+      </div>
 
-      function normalizeName(n) {
-        return n.trim().replace(/\s+/g, " ").toLowerCase();
-      }
+      <!-- pemilihan tutup -->
+      <div id="closedNotice" class="card center hidden">
+        <div class="big-icon">🔒</div>
+        <h2>Pemilihan Sedang Ditutup</h2>
+        <p class="muted">Silakan kembali nanti, atau hubungi panitia.</p>
+      </div>
 
-      function showError(msg) {
-        errorMsg.textContent = msg;
-      }
+      <!-- belum vote & pemilihan buka -->
+      <div id="votingArea" class="hidden">
+        <h2>Pilih Kandidatmu</h2>
+        <p class="muted">Klik salah satu kartu kandidat di bawah.</p>
+        <div id="candidateGrid" class="candidate-grid"></div>
+      </div>
+    </section>
+  </main>
 
-      function clearError() {
-        errorMsg.textContent = "";
-      }
-
-      function setCandidateButtonsDisabled(disabled) {
-        candidateBtns.forEach(b => b.disabled = disabled);
-      }
-
-      async function loadConfig() {
-        try {
-          const url = API_URL + "?action=config";
-          const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 10000);
-          const res = await fetch(url, { method: "GET", signal: controller.signal });
-          clearTimeout(timeout);
-
-          if (!res.ok) throw new Error("Network error while loading config");
-          const data = await res.json();
-
-          // Expected shape:
-          // {
-          //   voters: ["Agus", "Asep", ...],
-          //   alreadyVoted: ["Agus", ...]  // any canonical names who already voted
-          // }
-          daftarNama = Array.isArray(data.voters) ? data.voters : [];
-          const al = Array.isArray(data.alreadyVoted) ? data.alreadyVoted : [];
-
-          // Build lookup structures
-          nameMap.clear();
-          allowedNamesNormalized.clear();
-          alreadyVotedNormalized.clear();
-
-          daftarNama.forEach(n => {
-            const norm = normalizeName(n);
-            allowedNamesNormalized.add(norm);
-            if (!nameMap.has(norm)) nameMap.set(norm, n); // first canonical wins
-          });
-
-          al.forEach(n => {
-            const norm = normalizeName(n);
-            alreadyVotedNormalized.add(norm);
-          });
-
-          configLoaded = true;
-          if (loadingMsg) loadingMsg.textContent = "Voter list loaded.";
-        } catch (e) {
-          if (loadingMsg) loadingMsg.textContent = "Failed to load voter list. Please refresh the page.";
-        }
-      }
-
-      // clear error while typing
-      document.getElementById("nama").addEventListener("input", clearError);
-
-      window.addEventListener("load", function () {
-        // Load server config on page load
-        loadConfig();
-
-        // Keep the old local UX guard (not secure—server enforces the real protection)
-        if (localStorage.getItem("sudahPilih") === "true") {
-          pageLogin.style.display = "none";
-          pageVote.style.display = "none";
-          pageThanks.style.display = "block";
-        }
-      });
-
-      loginBtn.addEventListener("click", function () {
-        clearError();
-        const namaRaw = document.getElementById("nama").value;
-        const namaNorm = normalizeName(namaRaw);
-
-        if (!configLoaded) {
-          showError("Please wait, still loading voter list...");
-          return;
-        }
-        if (namaNorm === "") {
-          showError("Name cannot be empty");
-          return;
-        }
-        if (!allowedNamesNormalized.has(namaNorm)) {
-          showError("Your name is not registered as a voter");
-          return;
-        }
-        if (alreadyVotedNormalized.has(namaNorm)) {
-          showError("This name has already voted");
-          return;
-        }
-
-        // Store canonical sheet name for consistent server records
-        const canonical = nameMap.get(namaNorm) || namaRaw.trim();
-        localStorage.setItem("pemilih", canonical);
-
-        pageLogin.style.display = "none";
-        pageVote.style.display = "block";
-
-        const firstBtn = document.querySelector(".candidate-btn");
-        if (firstBtn) firstBtn.focus();
-      });
-
-      async function submitVote(candidateName) {
-        const pemilih = localStorage.getItem("pemilih");
-        if (!pemilih) {
-          showError("Please login first");
-          return;
-        }
-        if (submitting) return;
-
-        submitting = true;
-        setCandidateButtonsDisabled(true);
-        clearError();
-
-        try {
-          const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 10000);
-
-          // Use standard form data for easiest handling in Apps Script
-          const formData = new FormData();
-          formData.append("action", "vote");
-          formData.append("name", pemilih);
-          formData.append("candidate", candidateName);
-
-          const res = await fetch(API_URL, { method: "POST", body: formData, signal: controller.signal });
-          clearTimeout(timeout);
-
-          if (!res.ok) throw new Error("network");
-          const json = await res.json();
-
-          // Expected JSON:
-          // { status: "ok" }
-          // { status: "error", code: "already_voted" | "not_registered" | "invalid_candidate" | "bad_request" | "server_error", message: "..." }
-          if (json.status === "ok") {
-            localStorage.setItem("sudahPilih", "true");
-            pageVote.style.display = "none";
-            pageThanks.style.display = "block";
-            pageThanks.focus && pageThanks.focus();
-          } else if (json.status === "error") {
-            if (json.code === "already_voted") {
-              showError("This name has already voted");
-            } else if (json.code === "not_registered") {
-              showError("Your name is not registered as a voter");
-            } else if (json.code === "invalid_candidate") {
-              showError("Invalid candidate");
-            } else {
-              showError(json.message || "Failed to send vote, please try again");
-            }
-          } else {
-            showError("Failed to send vote, please try again");
-          }
-        } catch (err) {
-          if (err.name === "AbortError") {
-            showError("Request timed out, please try again");
-          } else {
-            showError("Failed to send vote, please try again");
-          }
-        } finally {
-          submitting = false;
-          setCandidateButtonsDisabled(false);
-        }
-      }
-
-      // Candidate button click handlers
-      document.querySelectorAll(".candidate-btn").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-          const name = e.currentTarget.getAttribute("data-name");
-          submitVote(name);
-        });
-      });
-
-      kembaliBtn.addEventListener("click", function () {
-        localStorage.removeItem("pemilih");
-        localStorage.removeItem("sudahPilih");
-        pageThanks.style.display = "none";
-        pageLogin.style.display = "block";
-        document.getElementById("nama").value = "";
-        clearError();
-      });
-
-    })();
-  </script>
-  <!-- end vote-script section -->
-
-  <!-- info section -->
-  <section class="info_section long_section">
-
-    <div class="container">
-      <div class="contact_nav">
-        <a href="https://www.instagram.com/jamas_matsanewa">
-          <i class="fa fa-instagram" aria-hidden="true"></i>
-          <span>
-            @jamas_matsanewa
-          </span>
-        </a>
-        <a href="jamas.matsanewa.me/Drive-JAMAS">
-          <i class="fa fa-folder-open" aria-hidden="true"></i>
-          <span>
-            jamas.matsanewa.me/Drive-JAMAS
-          </span>
-        </a>
-        <a href="https://maps.app.goo.gl/8diYYJscoifqPd9g9">
-          <i class="fa fa-map-marker" aria-hidden="true"></i>
-          <span>
-            Masjid Al-Fajr, MTsN 1 Kota Malang
-          </span>
-        </a>
+  <!-- ================= MODAL KONFIRMASI ================= -->
+  <div id="confirmModal" class="modal-overlay hidden">
+    <div class="modal card">
+      <h2>Konfirmasi Pilihanmu</h2>
+      <p class="muted">Pastikan pilihanmu sudah benar. <b>Setelah dikonfirmasi, tidak bisa diubah!</b></p>
+      <div id="confirmCandidate" class="confirm-candidate"></div>
+      <div class="row gap">
+        <button id="btnConfirmVote" class="btn primary">Ya, Pilih Ini</button>
+        <button id="btnCancelVote" class="btn subtle">Batal</button>
       </div>
     </div>
-  </section>
-  <!-- end info_section -->
+  </div>
 
-  <!-- footer section -->
-  <footer class="footer_section">
-    <div class="container">
-      <p>
-        &copy; <span id="displayYear"></span>
-        <a href="https://jamasmatsanewa.me/">Concept: Moch. Zildan '48 | Polished Ver.: Andika Aryo '48</a>
-      </p>
+  <!-- ================= [SUCCESS] MODAL SUKSES ================= -->
+  <div id="successModal" class="modal-overlay hidden">
+    <div class="modal card center">
+      <div class="big-icon">🎉</div>
+      <h2>Suara Berhasil Terekam!</h2>
+      <p class="muted">Terima kasih sudah memanfaatkan hak pilihmu.</p>
+      <button id="btnCloseSuccess" class="btn primary">Tutup</button>
     </div>
-  </footer>
-  <!-- footer section -->
+  </div>
 
+  <script src="js/evoter-store.js"></script>
+  <script src="js/evoter-vote.js"></script>
 </body>
-
 </html>
