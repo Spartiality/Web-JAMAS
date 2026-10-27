@@ -14,7 +14,10 @@ const EV = (() => {
     ? 'firebase' : 'local';
   const isFirebase = () => MODE === 'firebase';
 
-  const fbdb = MODE === 'firebase' ? firebase.database() : null;
+  const fbdb = MODE === 'firebase' ? (() => {
+    firebase.initializeApp(EV_FIREBASE);
+    return firebase.database();
+  })() : null;
   const r = (p) => fbdb.ref('evoter/' + p);
 
   /* ---------- util ---------- */
@@ -365,8 +368,9 @@ const EV = (() => {
   function onResultsChanged(cb) {
     if (MODE !== 'firebase') return () => {};
     const handler = () => { try { cb(); } catch (e) { /* abaikan */ } };
-    const offs = ['votes', 'voters', 'candidates'].map(p => r(p).on('value', handler));
-    return () => offs.forEach(([ref]) => ref.off('value', handler));
+    const refs = ['votes', 'voters', 'candidates'].map(p => r(p));
+    refs.forEach(ref => ref.on('value', handler));
+    return () => refs.forEach(ref => ref.off('value', handler));
   }
   const getMode = () => MODE;
 

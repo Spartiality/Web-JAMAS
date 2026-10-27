@@ -11,9 +11,9 @@
  *   Biarkan enabled: false.
  * ============================================================ */
 const EV_FIREBASE = {
-  enabled: false, // ← set true setelah kredensial di bawah terisi
-  apiKey: "ISI_API_KEY",
-  authDomain: "ISI_PROYEK.firebaseapp.com",
-  databaseURL: "https://ISI_PROYEK-default-rtdb.firebaseio.com",
-  projectId: "ISI_PROYEK",
+  enabled: true,
+  apiKey: "AIzaSyAdKP_R9OuI1DWxGJhnUVYFO83sjwP7VrU",
+  authDomain: "jamasmatsanewa-98921.firebaseapp.com",
+  databaseURL: "https://jamasmatsanewa-98921-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "jamasmatsanewa-98921",
 };
