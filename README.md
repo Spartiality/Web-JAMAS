@@ -49,6 +49,26 @@ E-Voter punya dua mode (atur di `js/evoter-config.js`):
 
 > Catatan keamanan: mode terpusat memakai rules terbuka (cocok untuk pemilihan sekolah). Jangan simpan data sensitif di database ini, dan ganti akun admin default `admin / admin123` di tab Pengaturan.
 
+### 🔒 Saklar rules database (wajib dipahami panitia)
+
+Rules Firebase adalah "saklar" aplikasi. Ada dua kondisi, ganti di **Firebase Console → Realtime Database → Rules → Publish**:
+
+**SAAT PEMILIHAN BERJALAN** (buka pemilihan, siswa vote, admin kelola):
+
+```json
+{ "rules": { ".read": true, ".write": true } }
+```
+
+**DI LUAR PEMILIHAN** (sebelum/acara belum berjalan/sudah selesai — situs E-Voter berhenti berfungsi):
+
+```json
+{ "rules": { ".read": false, ".write": false } }
+```
+
+Buka saat digelarkan, tutup setelah selesai. Verifikasi cepat: buka
+`https://jamasmatsanewa-98921-default-rtdb.asia-southeast1.firebasedatabase.app/evoter/election/meta.json` —
+muncul data = terbuka; ditolak/error = terkunci.
+
 ## Deployment
 
 The repository is a static site. `CNAME` points to `jamasmatsanewa.me`, and `render.yaml` publishes the repository root (`staticPublishPath: .`).
