@@ -27,7 +27,8 @@ const EV = (() => {
     return 'h' + h.toString(36);
   }
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-  const generatePin = () => String(Math.floor(1000 + Math.random() * 9000));
+  /** PIN default ketika tidak diisi (permintaan pengguna). */
+  const generatePin = () => '000000';
 
   /* ============================================================
    * MODE LOKAL (localStorage)
