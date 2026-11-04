@@ -191,9 +191,10 @@ const EV = (() => {
     nis = String(nis || '').trim();
     if (!nis) return { error: 'NIS kosong' };
     if (await voterExists(nis)) return { error: `NIS ${nis} sudah terdaftar (duplikat di-skip)` };
+    const cleanPin = String(pin == null ? '' : pin).trim();
     const voter = {
       nis, name: String(name || '').trim(),
-      pin: (pin == null || pin === '') ? generatePin() : String(pin).trim(),
+      pin: cleanPin || generatePin(),
       hasVoted: false, votedAt: null,
     };
     if (MODE === 'firebase') await r('voters/' + nis).set(voter);
@@ -237,7 +238,7 @@ const EV = (() => {
         if (have.has(nis)) { errors.push(`Baris ${i + 1}: NIS ${nis} duplikat (di-skip)`); return; }
         batch[nis] = {
           nis, name: String(row.name || '').trim(),
-          pin: (row.pin == null || row.pin === '') ? generatePin() : String(row.pin).trim(),
+          pin: String(row.pin == null ? '' : row.pin).trim() || generatePin(),
           hasVoted: false, votedAt: null,
         };
         have.add(nis); ok++;
