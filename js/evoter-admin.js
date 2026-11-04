@@ -161,11 +161,12 @@ async function renderVoterTable() {
   const t = $('#votersTable');
 
   t.innerHTML = `
-    <thead><tr><th>NIS</th><th>Nama</th><th>PIN</th><th>Status</th><th></th></tr></thead>
+    <thead><tr><th><input type="checkbox" id="voterSelAll" title="Pilih semua di halaman ini"></th><th>NIS</th><th>Nama</th><th>PIN</th><th>Status</th><th></th></tr></thead>
     <tbody>
-      ${page.length === 0 ? '<tr><td colspan="5" class="muted center">Tidak ada data.</td></tr>' : ''}
+      ${page.length === 0 ? '<tr><td colspan="6" class="muted center">Tidak ada data.</td></tr>' : ''}
       ${page.map(v => `
         <tr>
+          <td><input type="checkbox" class="voter-sel" data-id="${escapeHtml(v.id)}"></td>
           <td><b>${escapeHtml(v.nis)}</b></td>
           <td>${escapeHtml(v.name)}</td>
           <td><code>${escapeHtml(v.pin)}</code></td>
@@ -178,6 +179,13 @@ async function renderVoterTable() {
   t.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', async () => {
     if (confirm('Hapus akun pemilih ini?')) { await EV.deleteVoter(b.dataset.del); await renderAll(); }
   }));
+  const selAll = t.querySelector('#voterSelAll');
+  if (selAll) selAll.addEventListener('change', () => {
+    t.querySelectorAll('.voter-sel').forEach(cb => { cb.checked = selAll.checked; });
+    updateDeleteSelectedBtn();
+  });
+  t.querySelectorAll('.voter-sel').forEach(cb => cb.addEventListener('change', updateDeleteSelectedBtn));
+  updateDeleteSelectedBtn();
 
   // navigasi halaman (dibangun ulang setiap render, tidak menggandakan)
   let nav = $('#voterNav');
@@ -197,6 +205,26 @@ async function renderVoterTable() {
 }
 
 $('#voterSearch').addEventListener('input', () => { voterOffset = 0; renderVoterTable(); });
+
+/* ---------- Hapus banyak pemilih (checkbox) ---------- */
+function getSelectedVoters() {
+  return [...document.querySelectorAll('.voter-sel:checked')].map(cb => cb.dataset.id);
+}
+function updateDeleteSelectedBtn() {
+  const n = getSelectedVoters().length;
+  const btn = $('#btnDeleteSelected');
+  if (!btn) return;
+  btn.textContent = n ? `🗑️ Hapus Terpilih (${n})` : '🗑️ Hapus Terpilih';
+  btn.disabled = n === 0;
+}
+$('#btnDeleteSelected').addEventListener('click', async () => {
+  const ids = getSelectedVoters();
+  if (!ids.length) return;
+  if (!confirm(`Hapus ${ids.length} akun pemilih yang dicentang?`)) return;
+  const n = await EV.deleteVoters(ids);
+  alert(`${n} akun berhasil dihapus.`);
+  await renderAll();
+});
 
 $('#voterForm').addEventListener('submit', async (e) => {
   e.preventDefault();

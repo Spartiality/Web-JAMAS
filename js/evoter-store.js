@@ -204,6 +204,20 @@ const EV = (() => {
     db.voters = db.voters.filter(v => v.id !== id);
     saveLocal();
   }
+  /** Hapus banyak pemilih sekaligus (dari checkbox di panel admin). */
+  async function deleteVoters(ids) {
+    if (!ids || !ids.length) return 0;
+    if (MODE === 'firebase') {
+      const removal = {};
+      ids.forEach(nis => { removal[nis] = null; });
+      await r('voters').update(removal);
+      return ids.length;
+    }
+    const set = new Set(ids);
+    db.voters = db.voters.filter(v => !set.has(v.id));
+    saveLocal();
+    return ids.length;
+  }
   async function deleteAllVoters() {
     if (MODE === 'firebase') return r('voters').remove();
     db.voters = [];
@@ -267,21 +281,54 @@ const EV = (() => {
   /* ============================================================
    * LOGIN VOTER + VOTING
    * ============================================================ */
-  async function voterLogin(nis, pin) {
-    nis = String(nis || '').trim();
+  /**
+   * Login pemilih.
+   * `identifier` menerima NIS/NIM ATAU nama (tidak peka huruf besar-kecil).
+   * Selalu wajib PIN. Kalau ada beberapa pemilih dengan nama sama,
+   * diminta memakai NIS.
+   */
+  async function voterLogin(identifier, pin) {
+    identifier = String(identifier || '').trim();
+    if (!identifier) return { error: 'NIS/nama kosong' };
+    let voter = null;
+
     if (MODE === 'firebase') {
-      const s = await r('voters/' + nis).get();
-      if (!s.exists()) return { error: 'NIS tidak terdaftar' };
-      const v = s.val();
-      if (v.pin !== String(pin).trim()) return { error: 'PIN salah' };
-      localStorage.setItem(SESSION_KEY, JSON.stringify({ nis, name: v.name }));
-      return { voter: { id: nis, nis, ...v } };
+      const s = await r('voters').get();
+      if (s.exists()) {
+        const all = Object.entries(s.val()).map(([nis, v]) => ({ nis, ...v }));
+        voter = all.find(v => v.nis === identifier)
+          || {
+            matches: all.filter(v => String(v.name || '').trim().toLowerCase() === identifier.toLowerCase()),
+          };
+        if (voter && !voter.nis) {
+          if (voter.matches.length === 0) return { error: 'NIS/nama tidak terdaftar' };
+          if (voter.matches.length > 1) return { error: 'Nama ini dipakai lebih dari satu pemilih — gunakan NIS' };
+          voter = voter.matches[0];
+        }
+        if (!voter) return { error: 'NIS/nama tidak terdaftar' };
+      } else {
+        return { error: 'NIS/nama tidak terdaftar' };
+      }
+    } else {
+      voter = db.voters.find(v => v.nis === identifier)
+        || (() => {
+          const m = db.voters.filter(v => String(v.name || '').trim().toLowerCase() === identifier.toLowerCase());
+          if (m.length > 1) return { multiple: m };
+          return m[0] || null;
+        })();
+      if (voter && voter.multiple) return { error: 'Nama ini dipakai lebih dari satu pemilih — gunakan NIS' };
+      if (!voter) return { error: 'NIS/nama tidak terdaftar' };
     }
-    const v = db.voters.find(x => x.nis === nis);
-    if (!v) return { error: 'NIS tidak terdaftar' };
-    if (v.pin !== String(pin).trim()) return { error: 'PIN salah' };
-    db.session = v.id; saveLocal();
-    return { voter: { ...v } };
+
+    if (voter.pin !== String(pin).trim()) return { error: 'PIN salah' };
+
+    const voterOut = { id: voter.nis, ...voter };
+    if (MODE === 'firebase') {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ nis: voter.nis, name: voter.name }));
+    } else {
+      db.session = voter.nis; saveLocal();
+    }
+    return { voter: voterOut };
   }
   function getVoterSession() {
     if (MODE === 'firebase') {
@@ -378,7 +425,7 @@ const EV = (() => {
     getElection, setElection, openElection, closeElection,
     adminLogin, isAdmin, adminLogout, updateAdmin,
     getCandidates, addCandidate, deleteCandidate, deleteAllCandidates, importCandidates,
-    getVoters, addVoter, deleteVoter, deleteAllVoters, importVoters, resetAllVotes, factoryReset,
+    getVoters, addVoter, deleteVoter, deleteVoters, deleteAllVoters, importVoters, resetAllVotes, factoryReset,
     voterLogin, getVoterSession, voterLogout, castVote,
     getResults, onResultsChanged, getMode,
   };
