@@ -693,14 +693,34 @@
     const target = document.querySelector(hash);
     if (!target) return;
     const rectTop = target.getBoundingClientRect().top;
+    const targetTopAbs = rectTop + window.scrollY;
+
+    /* Bug diperbaiki: saat halaman di-refresh di tengah scene pin (mis. carousel
+       anggota), browser memulihkan posisi scroll yang berada DI DALAM/di bawah
+       section target. Koreksi anchor tidak boleh menariknya balik ke awal —
+       biarkan posisi item tetap, scene pin akan menggelar sesuai scroll. */
+    if (window.scrollY >= targetTopAbs - 10) {
+      if (lenis) lenis.scrollTo(window.scrollY, { duration: 0, force: true });
+      return;
+    }
+
     if (Math.abs(rectTop - 96) <= 4) return;
-    const top = Math.max(0, rectTop + window.scrollY - 96);
-    window.scrollTo({ top, behavior: "auto" });
+    const top = Math.max(0, targetTopAbs - 96);
+    /* Gunakan scrollToTarget (Lenis) agar posisi tak diperbaiki sistem ganda. */
+    const fakeTarget = { getBoundingClientRect: () => ({ top: top - window.scrollY + 96 }) };
+    scrollToTarget(fakeTarget);
   }
 
   window.addEventListener("load", () => {
     window.setTimeout(goToInitialHash, 150);
   }, { once: true });
   window.setTimeout(goToInitialHash, 1500);
+  /* Koreksi ikut diulang setelah pin spacer selesai di-settle ScrollTrigger,
+     tapi berhenti begitu ada interaksi pengguna (wheel/touch/key). */
+  if (window.ScrollTrigger) {
+    const onInitialRefresh = () => { if (!hashUserInteracted) goToInitialHash(); };
+    ScrollTrigger.addEventListener("refresh", onInitialRefresh);
+    window.setTimeout(() => ScrollTrigger.removeEventListener("refresh", onInitialRefresh), 4000);
+  }
 
 })();
