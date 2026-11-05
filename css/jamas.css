@@ -220,10 +220,17 @@ button { cursor: pointer; }
   border-color: var(--forest-900);
 }
 .btn--dark:hover { background: var(--ivory); color: var(--forest-950); border-color: var(--ivory); transform: translateY(-2px); }
-/* Di kartu E-Voter: samakan hijau tombol dengan hijau kartu (seamless) */
+/* Di kartu E-Voter: samakan hijau tombol dengan hijau kartu (seamless),
+   dan saat tersentuh kursor: jadi oval krem persis seperti tombol Form Pengaduan */
 .program__cta-card--evoter .btn--dark {
   background: var(--forest-800);
   border-color: var(--forest-800);
+}
+.program__cta-card--evoter .btn--dark:hover {
+  background: var(--ivory);
+  color: var(--forest-950);
+  border-color: var(--ivory);
+  transform: translateY(-2px);
 }
 
 /* ---------------------------------------------------------

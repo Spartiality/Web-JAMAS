@@ -113,9 +113,14 @@ async function openConfirm(id) {
   const c = (await EV.getCandidates()).find(x => x.id === id);
   if (!c) return;
   selectedCandidateId = id;
+  // Tampilkan wajah/foto kandidat jika ada; jika gagal muat/kosong -> inisial
+  const face = c.photo
+    ? `<img class="avatar big" src="${escapeHtml(c.photo)}" alt="Foto ${escapeHtml(c.name)}"
+         onerror="this.outerHTML='<div class=\\'avatar big\\'>${escapeHtml((c.name || '?')[0])}</div>'">`
+    : `<div class="avatar big">${escapeHtml((c.name || '?')[0])}</div>`;
   $('#confirmCandidate').innerHTML = `
     <div class="confirm-inner">
-      <div class="avatar big">${(c.name || '?')[0]}</div>
+      ${face}
       <div>
         <div class="tag">No. Urut ${c.no}</div>
         <h3>${escapeHtml(c.name)}</h3>
