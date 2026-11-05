@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terima Kasih — E-Voter</title>
+  <link rel="stylesheet" href="css/evoter.css">
+  <link rel="icon" href="images/opt/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital@1&family=Manrope:wght@500;700;800&display=swap">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img class="brand__logo" src="images/opt/logo.png" alt="Logo JAMAS">
+      <span class="brand__text"><strong>E-Voter</strong><small>JAMAS Matsanewa</small></span>
+    </div>
+    <nav>
+      <a href="index.html">← Situs JAMAS</a>
+      <a href="e-voter-admin.html">Panel Admin</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- ================= HERO TERIMA KASIH ================= -->
+    <section class="hero">
+      <h1>Terima Kasih!</h1>
+      <p class="muted">Partisipasimu membuat pemilihan ini lebih bermakna.</p>
+    </section>
+
+    <!-- ================= KARTU TERIMA KASIH ================= -->
+    <section class="card center thanks-card">
+      <h2>Suara Berhasil Terekam!</h2>
+      <p class="muted">Terima kasih sudah menggunakan hak pilihmu. Setiap pemilih hanya bisa memilih satu kali.</p>
+
+      <div id="voterSummary" class="voter-summary hidden">
+        <span class="eyebrow">Pemilih</span>
+        <b id="thanksName"></b>
+        <span id="thanksMeta" class="muted small"></span>
+      </div>
+
+      <div class="thanks-actions">
+        <a href="index.html" class="btn primary">Kembali ke Situs JAMAS</a>
+        <button id="btnLogoutThanks" class="btn subtle">Keluar</button>
+      </div>
+
+      <p id="redirectNote" class="muted small redirect-note"></p>
+    </section>
+  </main>
+
+  <script src="js/evoter-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="js/evoter-store.js"></script>
+  <script src="js/evoter-success.js"></script>
+</body>
+</html>
