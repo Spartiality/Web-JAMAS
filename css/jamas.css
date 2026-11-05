@@ -220,6 +220,11 @@ button { cursor: pointer; }
   border-color: var(--forest-900);
 }
 .btn--dark:hover { background: var(--ivory); color: var(--forest-950); border-color: var(--ivory); transform: translateY(-2px); }
+/* Di kartu E-Voter: samakan hijau tombol dengan hijau kartu (seamless) */
+.program__cta-card--evoter .btn--dark {
+  background: var(--forest-800);
+  border-color: var(--forest-800);
+}
 
 /* ---------------------------------------------------------
    Navigation
@@ -517,8 +522,8 @@ button { cursor: pointer; }
 .hero__letter {
   display: block;
   overflow: hidden;
-  padding: 0.04em 0.005em 0.13em;
-  margin: -0.04em -0.005em -0.13em;
+  padding: 0.14em 0.005em 0.13em;
+  margin: -0.14em -0.005em -0.13em;
 }
 .hero__letter > span { display: block; will-change: transform; }
 
