@@ -593,7 +593,7 @@ button { cursor: pointer; }
   top: 62%;
   right: calc(100% - 3.6rem);
   z-index: 5;
-  width: clamp(118px, 15vw, 218px);
+  width: clamp(138px, 18.5vw, 268px);
   aspect-ratio: 4 / 3;
   border: 7px solid var(--ivory);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
