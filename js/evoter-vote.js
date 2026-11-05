@@ -8,13 +8,19 @@ const hide = (el) => el.classList.add('hidden');
 
 let selectedCandidateId = null;
 
-function fmtTime(ts) {
-  return new Date(ts).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
-}
 function escapeHtml(s) {
   const d = document.createElement('div');
   d.textContent = String(s ?? '');
   return d.innerHTML;
+}
+
+/* Foto kandidat dengan fallback inisial nama (dipakai di kartu & modal konfirmasi). */
+function candidateAvatar(c, big = false) {
+  const cls = big ? 'avatar big' : 'avatar';
+  const initial = (c.name || '?')[0];
+  if (!c.photo) return `<div class="${cls}">${escapeHtml(initial)}</div>`;
+  return `<img class="${cls}" src="${escapeHtml(c.photo)}" alt="${escapeHtml(c.name)}"
+    onerror="this.outerHTML='<div class=\\'${cls}\\'>${escapeHtml(initial)}</div>'">`;
 }
 
 /* ---------- Inisialisasi ---------- */
@@ -40,9 +46,17 @@ async function showVoteBoard(voter, elArg) {
 
   const el = elArg || await EV.getElection();
 
-  if (voter.hasVoted) {
-    show($('#alreadyVoted'));
-    $('#votedAtText').textContent = 'Dipilih pada: ' + fmtTime(voter.votedAt);
+  // Sudah memilih -> jangan tampilkan papan voting lagi, langsung ke halaman terima kasih.
+  let hasVoted = !!voter.hasVoted;
+  if (!hasVoted) {
+    try {
+      const list = await EV.getVoters();
+      const fresh = list.find(v => v.nis === voter.nis);
+      hasVoted = !!(fresh && fresh.hasVoted);
+    } catch (e) { /* biarkan alur normal */ }
+  }
+  if (hasVoted) {
+    location.replace('vote-success.html');
     return;
   }
   if (el.status !== 'open') {
@@ -87,10 +101,7 @@ async function renderCandidates() {
   list.forEach(c => {
     const card = document.createElement('div');
     card.className = 'candidate-card';
-    const img = c.photo
-      ? `<img src="${escapeHtml(c.photo)}" alt="${escapeHtml(c.name)}"
-             onerror="this.outerHTML='<div class=\\'avatar\\'>${(c.name || '?')[0]}</div>'">`
-      : `<div class="avatar">${(c.name || '?')[0]}</div>`;
+    const img = candidateAvatar(c);
     card.innerHTML = `
       ${img}
       <div class="cand-no">No. Urut ${c.no}</div>
@@ -113,14 +124,9 @@ async function openConfirm(id) {
   const c = (await EV.getCandidates()).find(x => x.id === id);
   if (!c) return;
   selectedCandidateId = id;
-  // Tampilkan wajah/foto kandidat jika ada; jika gagal muat/kosong -> inisial
-  const face = c.photo
-    ? `<img class="avatar big" src="${escapeHtml(c.photo)}" alt="Foto ${escapeHtml(c.name)}"
-         onerror="this.outerHTML='<div class=\\'avatar big\\'>${escapeHtml((c.name || '?')[0])}</div>'">`
-    : `<div class="avatar big">${escapeHtml((c.name || '?')[0])}</div>`;
   $('#confirmCandidate').innerHTML = `
     <div class="confirm-inner">
-      ${face}
+      ${candidateAvatar(c, true)}
       <div>
         <div class="tag">No. Urut ${c.no}</div>
         <h3>${escapeHtml(c.name)}</h3>
@@ -150,12 +156,7 @@ $('#btnConfirmVote').addEventListener('click', async () => {
     init();
     return;
   }
-  show($('#successModal'));
-});
-
-$('#btnCloseSuccess').addEventListener('click', () => {
-  hide($('#successModal'));
-  location.reload();
+  location.replace('vote-success.html');
 });
 
 init();
