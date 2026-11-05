@@ -594,12 +594,12 @@ button { cursor: pointer; }
   right: calc(100% - 3.6rem);
   z-index: 5;
   width: clamp(118px, 15vw, 218px);
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 3;
   border: 7px solid var(--ivory);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
   transform: rotate(-6deg);
 }
-.hero__photo--small img { object-position: 50% 18%; }
+.hero__photo--small img { object-position: 50% 45%; }
 
 .hero__seal {
   position: absolute;
@@ -1705,6 +1705,14 @@ button { cursor: pointer; }
   transition: color 0.3s;
 }
 .footer__top-link:hover { color: var(--ivory); }
+.footer__made {
+  margin-top: 0.35rem;
+  color: var(--gold-2);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.footer__made strong { color: var(--ivory); font-weight: 700; }
 
 /* ---------------------------------------------------------
    Dialogs
@@ -1967,7 +1975,7 @@ dialog[open] { animation: dialogIn 0.4s var(--ease); }
     top: auto;
     right: auto;
     width: 100%;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 3;
     border-width: 5px;
     transform: rotate(-3deg);
     margin-bottom: 1rem;
@@ -2052,7 +2060,7 @@ dialog[open] { animation: dialogIn 0.4s var(--ease); }
 
   .hero__title { font-size: clamp(3.9rem, 29vw, 8rem); }
   .hero__photo--main { aspect-ratio: 1 / 1; }
-  .hero__photo--small { aspect-ratio: 3 / 4; }
+  .hero__photo--small { aspect-ratio: 4 / 3; }
   .hero__eyebrow { font-size: 0.51rem; letter-spacing: 0.13em; }
   .hero__lede { font-size: 1.1rem; }
   .hero__stats strong { font-size: 1.45rem; }
